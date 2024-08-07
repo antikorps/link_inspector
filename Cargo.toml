@@ -1,0 +1,18 @@
+[package]
+name = "link_inspector"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+axum = { version = "0.7.5", features = ["multipart"] }
+axum-embed = "0.1.0"
+futures = "0.3.30"
+reqwest = "0.12.5"
+roxmltree = "0.20.0"
+rust-embed = "8.5.0"
+serde = { version = "1.0.204", features = ["derive"] }
+serde_json = "1.0.122"
+tokio = { version = "1.39.2", features = ["full"] }
+zip = "2.1.6"
