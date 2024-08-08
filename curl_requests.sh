@@ -1,1 +1,0 @@
-curl -F "file=@test_file.docx;type=application/vnd.openxmlformats-officedocument.wordprocessingml.document" http://localhost:3000/upload

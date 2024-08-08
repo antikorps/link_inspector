@@ -1,0 +1,1 @@
+curl -F "file=@_test_file.html;" http://localhost:3000/upload

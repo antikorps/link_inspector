@@ -1,0 +1,1 @@
+curl -F "file=@_test_file.xlsx;type=application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" http://localhost:3000/upload

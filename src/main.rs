@@ -1,5 +1,6 @@
 mod app_router;
-mod handler_docx;
+mod handler_html;
+mod handler_office;
 mod http_client;
 mod link_checker;
 
