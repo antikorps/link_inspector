@@ -1,5 +1,3 @@
-use std::collections::HashMap;
-
 use crate::app_router::models::NonCheckedLink;
 
 use super::process::HandlerHtml;
@@ -20,28 +18,16 @@ impl HandlerHtml {
             }
             Ok(ok) => selector = ok,
         }
-        let mut collection: HashMap<String, usize> = HashMap::new();
+        let mut links = Vec::new();
         for element in self.document.as_ref().unwrap().select(&selector) {
             let href = element.attr("href");
             if href.is_none() {
                 continue;
             }
-            let link = href.unwrap().to_string();
+            let text = element.text().collect::<String>();
+            let url = href.unwrap().to_string();
 
-            if collection.contains_key(&link) {
-                if let Some(count) = collection.get_mut(&link) {
-                    *count += 1;
-                }
-            } else {
-                collection.insert(link.to_string(), 1);
-            }
-        }
-        let mut links = Vec::new();
-        for (key, value) in collection {
-            links.push(NonCheckedLink {
-                url: key,
-                number: value,
-            })
+            links.push(NonCheckedLink { url, text })
         }
         self.links = links;
     }

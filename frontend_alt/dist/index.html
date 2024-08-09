@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Link Inspector</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="manifest" href="/site.webmanifest">
+</head>
+
+<body>
+    <main class="bg-slate-200 dark:bg-slate-800 flex min-h-screen justify-center items-center p-10">
+        <div class="flex flex-col items-center justify-center gap-16 w-full max-w-[1200px]">
+            <h1 class="text-4xl font-bold text-gray-900 dark:text-white">Link Inspector</h1>
+            <form id="file-form" class="w-full max-w-[600px]">
+                <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="file_input">Selecciona
+                    tu archivo:</label>
+                <input
+                    class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                    aria-describedby="file-form-file" id="file-form-file" type="file" required>
+                <p class="mt-1 text-sm text-gray-500 dark:text-gray-300" id="file_input_help">Extensiones válidas: DOCX,
+                    PPTX, XLSX, HTML.</p>
+                <div class="my-3 text-center">
+                    <button type="button" id="file-form-reset"
+                        class="text-white bg-gradient-to-r from-red-400 via-red-500 to-red-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2">Borrar</button>
+                    <button type="submit" id="file-form-upload"
+                        class="text-white bg-gradient-to-r from-green-400 via-green-500 to-green-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-green-300 dark:focus:ring-green-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2">Enviar
+                    </button>
+                </div>
+            </form>
+
+            <div id="results" class="hidden">
+                <div
+                    class="bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 p-6 w-full max-w-full md:min-w-[800px]">
+
+                    <div id="results-loading" class="hidden">
+                        <svg width="48" height="48" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <style>
+                                svg {
+                                    margin: 0 auto;
+                                }
+
+                                .spinner_z9k8 {
+                                    fill: rgb(107 114 128);
+                                    transform-origin: center;
+                                    animation: spinner_StKS .75s infinite linear
+                                }
+
+                                @keyframes spinner_StKS {
+                                    100% {
+                                        transform: rotate(360deg)
+                                    }
+                                }
+                            </style>
+                            <path d="M12,1A11,11,0,1,0,23,12,11,11,0,0,0,12,1Zm0,19a8,8,0,1,1,8-8A8,8,0,0,1,12,20Z"
+                                opacity=".25" />
+                            <path
+                                d="M12,4a8,8,0,0,1,7.89,6.7A1.53,1.53,0,0,0,21.38,12h0a1.5,1.5,0,0,0,1.48-1.75,11,11,0,0,0-21.72,0A1.5,1.5,0,0,0,2.62,12h0a1.53,1.53,0,0,0,1.49-1.3A8,8,0,0,1,12,4Z"
+                                class="spinner_z9k8" />
+                        </svg>
+
+                    </div>
+                    <h2 id="results-number"
+                        class="text-2xl font-bold text-gray-900 dark:text-white pt-4 pb-4 text-center hidden"></h2>
+                    <div id="results-error"
+                        class="p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400 hidden"
+                        role="alert">
+                        <h3 class="text-3xl font-bold dark:text-white text-center mt-2 mb-2">¡Ooops! se ha producido un
+                            error </h3>
+                        <h3 class="text-3xl font-bold dark:text-white text-center mt-2 mb-2">😵‍💫</h3>
+                        <p id="results-error-message" class="text-center mt-2 mb-2"> Change a few things up and try
+                            submitting again.</p>
+                    </div>
+
+
+                    <ul id="results-list" class="divide-y divide-gray-200 dark:divide-gray-700">
+
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </main>
+
+
+    <script>
+        /*
+            SELECTORS
+        */
+
+        const $fileForm = document.querySelector("#file-form")
+        const $fileFormFile = document.querySelector("#file-form-file")
+        const $fileFormReset = document.querySelector("#file-form-reset")
+
+        const $results = document.querySelector("#results")
+        const $resultsLoading = document.querySelector("#results-loading")
+        const $resultsNumber = document.querySelector("#results-number")
+        const $resultsError = document.querySelector("#results-error")
+        const $resultsErrorMessage = document.querySelector("#results-error-message")
+
+        const $resultsList = document.querySelector("#results-list")
+
+
+        /* 
+            EVENT HANDLERS
+        
+        */
+
+        $fileForm.addEventListener("submit", upload)
+        document.addEventListener("DOMContentLoaded", reset(true))
+        $fileFormReset.addEventListener("click", () => {
+            reset(true)
+        })
+
+
+        /* 
+            APP LOGIC
+        */
+
+        function reset(total) {
+            if (total) {
+                $fileFormFile.value = ""
+            }
+            $resultsLoading.classList.add("hidden")
+            $results.classList.add("hidden")
+            $resultsError.classList.add("hidden")
+            $resultsNumber.innerHTML = ""
+            $resultsList.innerHTML = ""
+            $resultsErrorMessage.innerHTML = ""
+        }
+
+        async function upload(event) {
+            event.preventDefault()
+            reset(false)
+            $resultsLoading.classList.remove("hidden")
+            $results.classList.remove("hidden")
+
+            const formData = new FormData();
+            formData.append("file", $fileFormFile.files[0]);
+            const f = await fetch("/upload", {
+                method: "POST",
+                body: formData,
+            });
+
+            const r = await f.json()
+            if (f.status != 200) {
+                $resultsErrorMessage.textContent = r["error"]
+                $resultsLoading.classList.add("hidden")
+                $resultsError.classList.remove("hidden")
+                $results.classList.remove("hidden")
+                return
+            }
+
+            let resultsNumber = 0
+
+            let resultsListHtml = ""
+
+            for (const result of r.links) {
+                resultsNumber++
+
+                let semaphore = "🔴"
+                let warning = ""
+                if (result.error != null) {
+                    warning += `➡️ Error: ${result.error}`
+                }
+                if (result.relocation != null) {
+                    warning += `➡️ Redireccionado a: ${result.relocation}`
+                    semaphore = "🟡"
+                }
+                if (result.status != null && result.status < 300 && semaphore == "🔴") {
+                    semaphore = "🟢"
+                }
+                let status = ""
+                if (result.status != null) {
+                    status = result.status
+                }
+
+                const resultTemplate = `
+                <li class="pt-3 pb-0 sm:pt-4">
+                    <div
+                        class="flex flex-col space-y-4 sm:space-y-0 sm:flex-row sm:items-center sm:space-x-4 rtl:space-x-reverse">
+                        <div class="flex-shrink-0">
+                        ${semaphore}
+                        </div>
+                        <div class="flex-1 min-w-0">
+                            <p class="text-sm font-medium text-gray-900 dark:text-white">
+                                ${result.text}
+                            </p>
+                            <p class="text-sm text-gray-500 dark:text-gray-400 mt-2 mb-2">
+                                <a href="${result.url}" target="_blank">${result.url}</a> ${warning}
+                            </p>
+                        </div>
+                        <div
+                            class="inline-flex items-center text-base font-semibold text-gray-900 dark:text-white text-center">
+                            STATUS<br>${status}
+                        </div>
+                    </div>
+                </li>`
+                resultsListHtml += resultTemplate
+
+            }
+
+            $resultsNumber.textContent = `Enlaces encontrados: ${resultsNumber}`
+            $resultsList.innerHTML = resultsListHtml
+            $resultsLoading.classList.add("hidden")
+        }
+    </script>
+</body>
+
+</html>

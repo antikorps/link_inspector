@@ -18,8 +18,7 @@ pub fn process_file(
     checked_file_type: CheckedFileType,
 ) -> Result<Vec<NonCheckedLink>, String> {
     let mut handler = new_handler_office(file_bytes, checked_file_type);
-    handler.get_xml_rels();
-    handler.get_links();
+    handler.unzip_and_extract();
     if handler.error.is_some() {
         return Err(handler.error.unwrap());
     }

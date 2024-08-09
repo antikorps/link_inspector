@@ -9,16 +9,16 @@ pub struct UploadResponse {
 #[derive(Serialize)]
 pub struct CheckedLink {
     pub url: String,
+    pub text: String,
     pub status: Option<u16>,
     pub active: bool,
-    pub number: usize,
     pub error: Option<String>,
     pub relocation: Option<String>,
 }
 
 pub struct NonCheckedLink {
     pub url: String,
-    pub number: usize,
+    pub text: String,
 }
 #[derive(PartialEq)]
 pub enum CheckedFileType {

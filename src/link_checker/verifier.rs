@@ -20,9 +20,9 @@ pub async fn verify_links(links: Vec<NonCheckedLink>, client: &Client) -> Vec<Ch
                     let error_message = format!("response error: {error}");
                     checked_links.push(CheckedLink {
                         url: String::from(&links[link_index].url),
+                        text: String::from(&links[link_index].text),
                         status: None,
                         active: false,
-                        number: links[link_index].number,
                         relocation: None,
                         error: Some(error_message),
                     });
@@ -43,10 +43,10 @@ pub async fn verify_links(links: Vec<NonCheckedLink>, client: &Client) -> Vec<Ch
             }
             checked_links.push(CheckedLink {
                 url: String::from(&links[link_index].url),
+                text: String::from(&links[link_index].text),
                 status: Some(status),
                 active,
                 relocation,
-                number: links[link_index].number,
                 error: None,
             });
             link_index += 1;
