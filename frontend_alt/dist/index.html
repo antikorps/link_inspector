@@ -319,7 +319,7 @@
             document.body.removeChild(link);
         }
 
-        function exportToJSON(data, fileName) {
+        function exportToJSON() {
             const json = JSON.stringify(links, null, 2);
             const blob = new Blob([json], { type: 'application/json' });
             const link = document.createElement("a");
