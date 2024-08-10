@@ -16,6 +16,7 @@ pub struct CheckedLink {
     pub relocation: Option<String>,
 }
 
+#[derive(Serialize)]
 pub struct NonCheckedLink {
     pub url: String,
     pub text: String,
@@ -26,5 +27,6 @@ pub enum CheckedFileType {
     Pptx,
     Xlsx,
     Html,
+    Txt,
     Invalid,
 }

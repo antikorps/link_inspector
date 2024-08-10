@@ -12,6 +12,8 @@ pub fn content_type_to_extension(content_type: &str) -> CheckedFileType {
         "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" => {
             CheckedFileType::Xlsx
         }
+        "text/plain" => CheckedFileType::Txt,
+
         "text/html" => CheckedFileType::Html,
         _ => CheckedFileType::Invalid,
     }

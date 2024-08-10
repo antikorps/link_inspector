@@ -3,7 +3,10 @@ use super::{
     router::App,
     utilities::content_type_to_extension,
 };
-use crate::{handler_html, handler_office, link_checker::verifier::verify_links};
+use crate::{
+    handler_html, handler_office, handlers::txt_handler::TxtHandler,
+    link_checker::verifier::verify_links,
+};
 use axum::{
     extract::{Multipart, State},
     http::StatusCode,
@@ -62,6 +65,22 @@ pub async fn upload(State(app): State<App>, mut multipart: Multipart) -> Respons
                     }
                 }
             }
+            CheckedFileType::Txt => match TxtHandler::process_file(file_bytes) {
+                Err(error) => {
+                    let body = UploadResponse {
+                        error: Some(error),
+                        links: None,
+                    };
+                    (StatusCode::BAD_REQUEST, Json(body)).into_response()
+                }
+                Ok(unchecked_links) => {
+                    let body = UploadResponse {
+                        error: None,
+                        links: Some(verify_links(unchecked_links, &app.http_client).await),
+                    };
+                    (StatusCode::OK, Json(body)).into_response()
+                }
+            },
         }
     } else {
         let body = UploadResponse {
