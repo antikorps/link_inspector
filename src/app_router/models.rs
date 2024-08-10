@@ -3,7 +3,7 @@ use serde::Serialize;
 #[derive(Serialize)]
 pub struct UploadResponse {
     pub error: Option<String>,
-    pub links: Vec<CheckedLink>,
+    pub links: Option<Vec<CheckedLink>>,
 }
 
 #[derive(Serialize)]
