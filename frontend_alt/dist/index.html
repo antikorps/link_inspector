@@ -255,10 +255,20 @@
 
         function sortLinksAsc(field) {
             links.sort((a, b) => {
-                if (a[field] < b[field]) {
+                let aValue = a[field];
+                let bValue = b[field];
+
+                if (typeof aValue === 'string') {
+                    aValue = aValue.toLowerCase();
+                }
+                if (typeof bValue === 'string') {
+                    bValue = bValue.toLowerCase();
+                }
+
+                if (aValue < bValue) {
                     return -1;
                 }
-                if (a[field] > b[field]) {
+                if (aValue > bValue) {
                     return 1;
                 }
                 return 0;
