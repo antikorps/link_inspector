@@ -2,6 +2,7 @@ use axum::body::Bytes;
 
 use super::{parser::html_parser_document, process::HandlerHtml};
 
+/// Set a handler for the HTML file with the document parsed
 pub fn new_handler_html(file_bytes: Bytes) -> HandlerHtml {
     let mut handler_html = HandlerHtml {
         document: None,

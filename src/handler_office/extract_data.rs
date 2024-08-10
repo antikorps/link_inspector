@@ -12,6 +12,12 @@ struct OfficeRelationLinkText {
 }
 
 impl HandlerOffice {
+    /// Iterate ZIP file searching for _rels files.
+    /// _rels files has the link info (url and id) but not the text
+    /// text is in the file with the same name but without _rels
+    /// iterate the file with the text and associate it via id
+    /// word/_rels/document.xml.rels => word/document.xml
+    /// word/_rels/footer1.xml.rels => word/footer1.xml
     pub fn unzip_and_extract(&mut self) {
         let cursor = Cursor::new(&self.file_bytes);
 
@@ -53,16 +59,6 @@ impl HandlerOffice {
                 _ => continue,
             }
 
-            /* Relacionar hipervínculo con el texto:
-            Los hipervínculos están en los .rels de las carpetas superiores
-            y el texto dentro del archivo con el mismo nombre si extensión .rels
-
-            Ejemplo en DOCX:
-            word/_rels/document.xml.rels => word/document.xml
-            word/_rels/footer1.xml.rels => word/footer1.xml
-            El tag se llama w:hyperlink
-
-             */
             let mut xml_rels = String::new();
             match file.read_to_string(&mut xml_rels) {
                 Err(error) => {
@@ -118,9 +114,7 @@ impl HandlerOffice {
             });
         }
 
-        /* Recorrer todos los archivos de texto con algún hipervínculo
-        para asociar mediante Id
-        */
+        // Iterate text files (no _rels)
         for content_file in content_text_files {
             match self.checked_file_type {
                 CheckedFileType::Docx => {

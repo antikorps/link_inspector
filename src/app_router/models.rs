@@ -8,10 +8,10 @@ pub struct UploadResponse {
 
 #[derive(Serialize)]
 pub struct CheckedLink {
+    pub active: u8,
     pub url: String,
     pub text: String,
     pub status: Option<u16>,
-    pub active: bool,
     pub error: Option<String>,
     pub relocation: Option<String>,
 }

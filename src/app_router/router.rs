@@ -15,15 +15,18 @@ pub struct App {
     pub http_client: Client,
 }
 
+/// Create route for serve static files and upload
 pub async fn make_router() -> Router {
     let serve_static = ServeEmbed::<StaticFiles>::new();
     let app = App {
         http_client: http_client::create_client::create().await,
     };
 
+    // /upload has a limit size of 32MG for avoid attacks.
+    // If the app if self hosted can be increase
     return Router::new()
         .route("/upload", post(upload))
-        .layer(DefaultBodyLimit::max(32000 * 1024)) // 32 megas de límite, aunque si no se va a hostear se podría aumentar indefinidamente
+        .layer(DefaultBodyLimit::max(32000 * 1024))
         .nest_service("/", serve_static)
         .with_state(app);
 }

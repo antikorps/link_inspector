@@ -9,6 +9,7 @@ impl HandlerHtml {
             return;
         }
         let selector;
+        // TODO: Creating the selector only once and sharing it in the app state may be better
         match Selector::parse("a") {
             Err(error) => {
                 let error_message =

@@ -11,6 +11,7 @@ pub struct HandlerHtml {
     pub links: Vec<NonCheckedLink>,
 }
 
+/// Process HTML file searching a tags
 pub fn process_file(file_bytes: Bytes) -> Result<Vec<NonCheckedLink>, String> {
     let mut handler = new_handler_html(file_bytes);
     handler.get_links();
