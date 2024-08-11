@@ -1,18 +1,18 @@
 use crate::app_router::models::{CheckedLink, NonCheckedLink};
 use reqwest::Client;
 
-/// Check a possible relocation of the url. 
+/// Check a possible relocation of the url.
 /// Set the conditions for a flexible relocation
 pub fn check_relocation(original_url: &str, final_url: &str) -> Option<String> {
     if original_url == final_url {
-        return None
+        return None;
     }
-    // the url https://as.com is relocation because the final url is https://as.com/ 
+    // the url https://as.com is relocation because the final url is https://as.com/
     match final_url.strip_suffix("/") {
         None => (),
         Some(ok) => {
             if original_url == ok {
-                return None
+                return None;
             }
         }
     }
@@ -54,7 +54,7 @@ pub async fn verify_links(links: Vec<NonCheckedLink>, client: &Client) -> Vec<Ch
             }
 
             let relocation = check_relocation(&links[link_index].url, response.url().as_str());
-            
+
             // The active field facilitates front-end management (visualization, grouping of results, order...)
             // 1 (green) means the status is correct (any 2XX)
             // 2 means that a correct status has been received (any 2XX) but the result of a redirection,

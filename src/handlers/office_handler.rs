@@ -1,8 +1,9 @@
-// document.xml.rels
-use super::process::HandlerOffice;
-use crate::app_router::models::{CheckedFileType, NonCheckedLink};
 use std::io::{Cursor, Read};
+
+use axum::body::Bytes;
 use zip::ZipArchive;
+
+use crate::app_router::models::{CheckedFileType, NonCheckedLink};
 
 struct OfficeRelationLinkText {
     id: String,
@@ -10,37 +11,25 @@ struct OfficeRelationLinkText {
     link: String,
     content_text_file: String,
 }
+pub struct OfficeHandler {}
 
-impl HandlerOffice {
-    /// Iterate ZIP file searching for _rels files.
-    /// _rels files has the link info (url and id) but not the text
-    /// text is in the file with the same name but without _rels
-    /// iterate the file with the text and associate it via id
-    /// word/_rels/document.xml.rels => word/document.xml
-    /// word/_rels/footer1.xml.rels => word/footer1.xml
-    pub fn unzip_and_extract(&mut self) {
-        let cursor = Cursor::new(&self.file_bytes);
-
-        let mut zip;
-        match ZipArchive::new(cursor) {
-            Err(error) => {
-                let error_message = format!("could not read docx as a zip file {error}");
-                self.error = Some(error_message);
-                return;
-            }
-            Ok(ok) => zip = ok,
-        }
-
+impl OfficeHandler {
+    pub fn get_links(
+        mut zip: ZipArchive<Cursor<Bytes>>,
+        checked_file_type: CheckedFileType,
+    ) -> Result<Vec<NonCheckedLink>, String> {
         let mut relations_link_text = Vec::new();
         let mut content_text_files = Vec::new();
 
         for i in 0..zip.len() {
             let mut file;
+
             match zip.by_index(i) {
                 Err(_) => continue,
                 Ok(ok) => file = ok,
             }
-            match self.checked_file_type {
+
+            match checked_file_type {
                 CheckedFileType::Docx => {
                     if !file.name().starts_with("word/_rels/") {
                         continue;
@@ -62,9 +51,8 @@ impl HandlerOffice {
             let mut xml_rels = String::new();
             match file.read_to_string(&mut xml_rels) {
                 Err(error) => {
-                    let error_message = format!("could not read document.xmls.rels {error}");
-                    self.error = Some(error_message);
-                    return;
+                    let error_message = format!("could not read xmls.rels {error}");
+                    return Err(error_message);
                 }
                 Ok(_) => (),
             }
@@ -72,10 +60,8 @@ impl HandlerOffice {
             let doc;
             match roxmltree::Document::parse(&xml_rels) {
                 Err(error) => {
-                    let error_message =
-                        format!("could not parse xml on document_xml_rels string: {error}");
-                    self.error = Some(error_message);
-                    return;
+                    let error_message = format!("could not parse xml on xml_rels string: {error}");
+                    return Err(error_message);
                 }
                 Ok(ok) => doc = ok,
             }
@@ -116,7 +102,7 @@ impl HandlerOffice {
 
         // Iterate text files (no _rels)
         for content_file in content_text_files {
-            match self.checked_file_type {
+            match checked_file_type {
                 CheckedFileType::Docx => {
                     let content_file_path = format!(
                         "word/{}",
@@ -135,8 +121,7 @@ impl HandlerOffice {
                         Err(error) => {
                             let error_message =
                                 format!("could not read {content_file_path} {error}");
-                            self.error = Some(error_message);
-                            return;
+                            return Err(error_message);
                         }
                         Ok(_) => (),
                     }
@@ -146,8 +131,7 @@ impl HandlerOffice {
                             let error_message = format!(
                                 "could not parse xml on {content_file_path} string: {error}"
                             );
-                            self.error = Some(error_message);
-                            return;
+                            return Err(error_message);
                         }
                         Ok(ok) => doc = ok,
                     }
@@ -204,8 +188,7 @@ impl HandlerOffice {
                         Err(error) => {
                             let error_message =
                                 format!("could not read {content_file_path} {error}");
-                            self.error = Some(error_message);
-                            return;
+                            return Err(error_message);
                         }
                         Ok(_) => (),
                     }
@@ -215,8 +198,7 @@ impl HandlerOffice {
                             let error_message = format!(
                                 "could not parse xml on {content_file_path} string: {error}"
                             );
-                            self.error = Some(error_message);
-                            return;
+                            return Err(error_message);
                         }
                         Ok(ok) => doc = ok,
                     }
@@ -273,8 +255,7 @@ impl HandlerOffice {
                         Err(error) => {
                             let error_message =
                                 format!("could not read {content_file_path} {error}");
-                            self.error = Some(error_message);
-                            return;
+                            return Err(error_message);
                         }
                         Ok(_) => (),
                     }
@@ -284,8 +265,7 @@ impl HandlerOffice {
                             let error_message = format!(
                                 "could not parse xml on {content_file_path} string: {error}"
                             );
-                            self.error = Some(error_message);
-                            return;
+                            return Err(error_message);
                         }
                         Ok(ok) => doc = ok,
                     }
@@ -339,6 +319,23 @@ impl HandlerOffice {
                 text: r.text,
             })
         }
-        self.links = non_checked_links;
+        return Ok(non_checked_links);
+    }
+
+    pub fn process_file(
+        file_bytes: Bytes,
+        checked_file_type: CheckedFileType,
+    ) -> Result<Vec<NonCheckedLink>, String> {
+        let cursor = Cursor::new(file_bytes);
+
+        match ZipArchive::new(cursor) {
+            Err(error) => {
+                let error_message = format!("could not read docx as a zip file {error}");
+                return Err(error_message);
+            }
+            Ok(zip) => {
+                return Self::get_links(zip, checked_file_type);
+            }
+        }
     }
 }

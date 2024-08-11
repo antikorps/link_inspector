@@ -24,7 +24,9 @@ impl TxtHandler {
             .collect()
     }
 
-    pub fn process_file(file_bytes: Bytes) -> Result<Vec<NonCheckedLink>, String> {
+    pub fn process_file(
+        file_bytes: Bytes
+    ) -> Result<Vec<NonCheckedLink>, String> {
         match Self::parse_file(file_bytes) {
             Ok(content) => {
                 let links = Self::get_links(content);
