@@ -29,7 +29,7 @@ pub async fn verify_links(links: Vec<NonCheckedLink>, client: &Client) -> Vec<Ch
             // Regarding relative links,
             // perhaps the user could be offered a possibility to include the hostname
             // or avoid the request because it is obvious that it will give an error.
-            futures.push(client.head(&link.url).send());
+            futures.push(client.get(&link.url).send());
         }
 
         let responses = futures::future::join_all(futures).await;
