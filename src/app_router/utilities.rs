@@ -4,15 +4,17 @@ use super::models::CheckedFileType;
 pub fn content_type_to_extension(content_type: &str) -> CheckedFileType {
     match content_type {
         "application/vnd.openxmlformats-officedocument.wordprocessingml.document" => {
-            return CheckedFileType::Docx
+            CheckedFileType::Docx
         }
         "application/vnd.openxmlformats-officedocument.presentationml.presentation" => {
-            return CheckedFileType::Pptx
+            CheckedFileType::Pptx
         }
         "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" => {
-            return CheckedFileType::Xlsx
+            CheckedFileType::Xlsx
         }
-        "text/html" => return CheckedFileType::Html,
-        _ => return CheckedFileType::Invalid,
+        "text/plain" => CheckedFileType::Txt,
+        "application/pdf" => CheckedFileType::Pdf,
+        "text/html" => CheckedFileType::Html,
+        _ => CheckedFileType::Invalid,
     }
 }

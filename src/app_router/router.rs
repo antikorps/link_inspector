@@ -24,9 +24,9 @@ pub async fn make_router() -> Router {
 
     // /upload has a limit size of 32MG for avoid attacks.
     // If the app if self hosted can be increase
-    return Router::new()
+    Router::new()
         .route("/upload", post(upload))
         .layer(DefaultBodyLimit::max(32000 * 1024))
         .nest_service("/", serve_static)
-        .with_state(app);
+        .with_state(app)
 }
