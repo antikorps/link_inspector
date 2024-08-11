@@ -1,15 +1,23 @@
----
-import Layout from '../layouts/Layout.astro';
-import UploadFileForm from '../components/UploadFileForm';
----
 
-<Layout title="Link Inspector">
-	<main class="bg-slate-200 dark:bg-slate-800 flex maw-w-screen w-full min-h-screen justify-center align-center">
-		<div class="flex flex-col items-center justify-center max-w-prose gap-16">
-    <h1 class="text-4xl font-bold text-gray-900 dark:text-white">Link Inspector</h1>
-    <UploadFileForm client:load />
-    	</div>
-	</main>
-</Layout>
-
-
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="refresh" content={`0;url=es}`} />
+  <title>Redirección</title>
+</head>
+<body>
+  <noscript>
+    <p>You must enable JavaScript in your browser // Debes habilitar JavaScript en el navegador</p>
+    <p><a href="/es">Pulsa aquí si el navegador no te redirecciona...</a></p>
+  </noscript>
+  <script>
+    const languagePreference = localStorage.getItem("linkInspectorLanguage")
+    if (languagePreference == null) {
+      window.location.href = "/es"
+    } else {
+      window.location.href = `/${languagePreference}`
+    }
+  </script>
+</body>
+</html>

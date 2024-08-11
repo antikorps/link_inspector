@@ -1,0 +1,16 @@
+{
+    "lang": "Français",
+    "labelLanguage": "Langue",
+    "fileFormLabel": "Sélectionnez votre fichier à traiter:",
+    "fileFormExtensionValid": "Extensions valides: DOCX, PPTX, XLSX, HTML, TXT, PDF",
+    "fileResetButton": "Effacer",
+    "fileUploadButton": "Envoyer",
+    "errorTextHeading": "Oups! Une erreur s'est produite",
+    "resultsNumber": "Liens trouvés",
+    "orderLabel": "Trier",
+    "orderSelectOption1": "État",
+    "orderSelectOption2": "URL",
+    "orderSelectOption3": "Statut",
+    "orderSelectOption4": "Texte",
+    "exportLabel": "Exporter"
+}

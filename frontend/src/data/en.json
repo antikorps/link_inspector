@@ -1,6 +1,8 @@
 {
+    "lang": "English",
+    "labelLanguage": "Language",
     "fileFormLabel": "Select your file:",
-    "fileFormExtensionValid": "Valid extensions: DOCX, PPTX, XLSX, HTML, PDF",
+    "fileFormExtensionValid": "Valid extensions: DOCX, PPTX, XLSX, HTML, TXT, PDF",
     "fileResetButton": "Reset",
     "fileUploadButton": "Send",
     "errorTextHeading": "¡Ooops! This is not fine",

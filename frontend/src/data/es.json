@@ -1,6 +1,8 @@
 {
+    "lang": "Español",
+    "labelLanguage": "Idioma",
     "fileFormLabel": "Selecciona tu archivo para procesar:",
-    "fileFormExtensionValid": "Extensiones válidas: DOCX, PPTX, XLSX, HTML, PDF",
+    "fileFormExtensionValid": "Extensiones válidas: DOCX, PPTX, XLSX, HTML, TXT, PDF",
     "fileResetButton": "Borrar",
     "fileUploadButton": "Enviar",
     "errorTextHeading": "¡Ooops! se ha producido un error",

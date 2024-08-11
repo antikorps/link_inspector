@@ -7,7 +7,7 @@ use rust_embed::RustEmbed;
 use super::upload::upload;
 
 #[derive(RustEmbed, Clone)]
-#[folder = "frontend_alt/dist"]
+#[folder = "frontend/dist"]
 struct StaticFiles;
 
 #[derive(Clone)]
