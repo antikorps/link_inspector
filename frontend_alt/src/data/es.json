@@ -1,0 +1,14 @@
+{
+    "fileFormLabel": "Selecciona tu archivo para procesar:",
+    "fileFormExtensionValid": "Extensiones válidas: DOCX, PPTX, XLSX, HTML, PDF",
+    "fileResetButton": "Borrar",
+    "fileUploadButton": "Enviar",
+    "errorTextHeading": "¡Ooops! se ha producido un error",
+    "resultsNumber": "Enlaces encontrados",
+    "orderLabel": "Ordenar",
+    "orderSelectOption1": "Estado",
+    "orderSelectOption2": "URL",
+    "orderSelectOption3": "Status",
+    "orderSelectOption4": "Texto",
+    "exportLabel": "Exportar"
+}

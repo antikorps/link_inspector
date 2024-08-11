@@ -1,0 +1,14 @@
+{
+    "fileFormLabel": "Select your file:",
+    "fileFormExtensionValid": "Valid extensions: DOCX, PPTX, XLSX, HTML, PDF",
+    "fileResetButton": "Reset",
+    "fileUploadButton": "Send",
+    "errorTextHeading": "¡Ooops! This is not fine",
+    "resultsNumber": "Total links",
+    "orderLabel": "Sort",
+    "orderSelectOption1": "State",
+    "orderSelectOption2": "URL",
+    "orderSelectOption3": "Status",
+    "orderSelectOption4": "Text",
+    "exportLabel": "Export"
+}

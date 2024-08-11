@@ -1,0 +1,1 @@
+cd frontend_alt/ && npx astro build && cd .. && cargo run
