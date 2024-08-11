@@ -2,13 +2,14 @@ extern crate linkify;
 
 use axum::body::Bytes;
 use linkify::{LinkFinder, LinkKind};
+use lopdf::Document;
 use url::Url;
 
 use crate::app_router::models::NonCheckedLink;
 
-pub struct TxtHandler {}
+pub struct PdfHandler {}
 
-impl TxtHandler {
+impl PdfHandler {
     fn get_links(text: String) -> Vec<NonCheckedLink> {
         let mut finder = LinkFinder::new();
         finder.kinds(&[LinkKind::Url]);
@@ -36,13 +37,18 @@ impl TxtHandler {
     }
 
     fn parse_file(file_bytes: Bytes) -> Result<String, String> {
-        match String::from_utf8(file_bytes.to_vec()) {
-            Err(_error) => {
-                let error_message = "error reading the file";
-                Err(error_message.to_string())
+        match Document::load_mem(file_bytes.to_vec().as_slice()) {
+            Ok(document) => {
+                let mut annotations: Vec<String> = Vec::new();
+                for (_, object_id) in document.get_pages().iter() {
+                    let page_annotations = document.get_page_annotations(*object_id);
+                    page_annotations.iter().for_each(|annotation| {
+                        annotations.push(format!("{:?}", annotation));
+                    });
+                }
+                Ok(annotations.join("\n").to_string())
             }
-
-            Ok(content) => Ok(content),
+            Err(err) => Err(err.to_string()),
         }
     }
 }

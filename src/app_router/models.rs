@@ -28,5 +28,6 @@ pub enum CheckedFileType {
     Xlsx,
     Html,
     Txt,
+    Pdf,
     Invalid,
 }

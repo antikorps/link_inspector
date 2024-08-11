@@ -13,7 +13,7 @@ pub fn content_type_to_extension(content_type: &str) -> CheckedFileType {
             CheckedFileType::Xlsx
         }
         "text/plain" => CheckedFileType::Txt,
-
+        "application/pdf" => CheckedFileType::Pdf,
         "text/html" => CheckedFileType::Html,
         _ => CheckedFileType::Invalid,
     }

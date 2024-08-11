@@ -10,6 +10,7 @@ axum = { version = "0.7.5", features = ["multipart"] }
 axum-embed = "0.1.0"
 futures = "0.3.30"
 linkify = "0.10.0"
+lopdf = "0.33.0"
 reqwest = "0.12.5"
 roxmltree = "0.20.0"
 rust-embed = "8.5.0"
