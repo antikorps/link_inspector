@@ -3,7 +3,7 @@ use std::io::{Cursor, Read};
 use axum::body::Bytes;
 use zip::ZipArchive;
 
-use crate::app_router::models::{CheckedFileType, NonCheckedLink};
+use crate::app_router::models::{FileType, NonCheckedLink};
 
 struct OfficeRelationLinkText {
     id: String,
@@ -16,7 +16,7 @@ pub struct OfficeHandler {}
 impl OfficeHandler {
     pub fn get_links(
         mut zip: ZipArchive<Cursor<Bytes>>,
-        checked_file_type: CheckedFileType,
+        checked_file_type: FileType,
     ) -> Result<Vec<NonCheckedLink>, String> {
         let mut relations_link_text = Vec::new();
         let mut content_text_files = Vec::new();
@@ -30,31 +30,27 @@ impl OfficeHandler {
             }
 
             match checked_file_type {
-                CheckedFileType::Docx => {
+                FileType::Docx => {
                     if !file.name().starts_with("word/_rels/") {
                         continue;
                     }
                 }
-                CheckedFileType::Pptx => {
+                FileType::Pptx => {
                     if !file.name().starts_with("ppt/slides/_rels") {
                         continue;
                     }
                 }
-                CheckedFileType::Xlsx => {
+                FileType::Xlsx => {
                     if !file.name().starts_with("xl/worksheets/_rels") {
                         continue;
                     }
                 }
                 _ => continue,
             }
-
             let mut xml_rels = String::new();
-            match file.read_to_string(&mut xml_rels) {
-                Err(error) => {
-                    let error_message = format!("could not read xmls.rels {error}");
-                    return Err(error_message);
-                }
-                Ok(_) => (),
+            if let Err(error) = file.read_to_string(&mut xml_rels) {
+                let error_message = format!("could not read xmls.rels {error}");
+                return Err(error_message);
             }
 
             let doc;
@@ -103,7 +99,7 @@ impl OfficeHandler {
         // Iterate text files (no _rels)
         for content_file in content_text_files {
             match checked_file_type {
-                CheckedFileType::Docx => {
+                FileType::Docx => {
                     let content_file_path = format!(
                         "word/{}",
                         content_file
@@ -169,8 +165,7 @@ impl OfficeHandler {
                         }
                     }
                 }
-
-                CheckedFileType::Pptx => {
+                FileType::Pptx => {
                     let content_file_path = format!(
                         "ppt/slides/{}",
                         content_file
@@ -237,7 +232,7 @@ impl OfficeHandler {
                     }
                 }
 
-                CheckedFileType::Xlsx => {
+                FileType::Xlsx => {
                     let content_file_path = format!(
                         "xl/worksheets/{}",
                         content_file
@@ -324,7 +319,7 @@ impl OfficeHandler {
 
     pub fn process_file(
         file_bytes: Bytes,
-        checked_file_type: CheckedFileType,
+        checked_file_type: FileType,
     ) -> Result<Vec<NonCheckedLink>, String> {
         let cursor = Cursor::new(file_bytes);
 
