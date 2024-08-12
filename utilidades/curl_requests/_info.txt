@@ -1,8 +1,0 @@
-https://www.rust-lang.org
-https://play.rust-lang.org/
-https://en.wikipedia.org/wiki/Rust_(programming_language)
-https://www.mozilla.org/es-ES/firefox/new/
-
-word/_rels/
-xl/worksheets/_rels
-ppt/slides/_rels
