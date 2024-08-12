@@ -1,1 +1,0 @@
-curl -s -F "file=@_test_file.xlsx;type=application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" http://localhost:3000/upload | grep -Eo '"[^"]*" *(: *([0-9]*|"[^"]*")[^{}\["]*|,)?|[^"\]\[\}\{]*|\{|\},?|\[|\],?|[0-9 ]*,?' | awk '{if ($0 ~ /^[}\]]/ ) offset-=4; printf "%*c%s\n", offset, " ", $0; if ($0 ~ /^[{\[]/) offset+=4}'

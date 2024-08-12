@@ -1,0 +1,37 @@
+---
+const { pageContent } = Astro.props;
+---
+
+<details class="block w-full max-w-[600px]">
+    <summary
+        class="cursor-pointer p-3 font-medium rtl:text-right text-gray-500 border border-gray-400 rounded-xl focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-800 dark:border-gray-700 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800"
+        >{pageContent.useSummary}</summary
+    >
+    <div class="p-3">
+        <p class="mb-2 text-gray-500 dark:text-gray-400">
+            {pageContent.useExplication}
+        </p>
+        <p class="mb-2 text-gray-500 dark:text-gray-400">
+            {pageContent.useResults}
+        </p>
+        <p class="mb-2 text-gray-500 dark:text-gray-400 ml-4">
+            {pageContent.useGreen}
+        </p>
+        <p class="mb-2 text-gray-500 dark:text-gray-400 ml-4">
+            {pageContent.useYellow}
+        </p>
+        <p class="mb-2 text-gray-500 dark:text-gray-400 ml-4">
+            {pageContent.userRed}
+        </p>
+        <p class="mb-2 text-gray-500 dark:text-gray-400">
+            {pageContent.useInfoStatusCode}
+            <a
+                href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Status"
+                target="_blank">🔗</a
+            >.
+        </p>
+        <p class="mb-2 text-gray-500 dark:text-gray-400">
+            {pageContent.useVisitGitHub}
+        </p>
+    </div>
+</details>

@@ -2,7 +2,7 @@
     "lang": "Español",
     "labelLanguage": "Idioma",
     "fileFormLabel": "Selecciona tu archivo para procesar:",
-    "fileFormExtensionValid": "Extensiones válidas: DOCX, PPTX, XLSX, HTML, TXT, PDF",
+    "fileFormExtensionValid": "Extensiones válidas: docx, pptx, xlsx, html, txt, pdf",
     "fileResetButton": "Borrar",
     "fileUploadButton": "Enviar",
     "errorTextHeading": "¡Ooops! se ha producido un error",
@@ -10,7 +10,15 @@
     "orderLabel": "Ordenar",
     "orderSelectOption1": "Estado",
     "orderSelectOption2": "URL",
-    "orderSelectOption3": "Status",
+    "orderSelectOption3": "Status Code",
     "orderSelectOption4": "Texto",
-    "exportLabel": "Exportar"
+    "exportLabel": "Exportar",
+    "useSummary": "Funcionamiento y uso",
+    "useExplication": "Link Inspector permite verificar los enlaces del documento que adjuntes en el formulario.",
+    "useResults": "Los resultados se pueden interpretar de esta forma:",
+    "useGreen": "🟢 el status code recibido es correcto por lo que se considera un enlace verificado.",
+    "useYellow": "🟡 el status code recibido es correcto, pero existe algún aspecto que debería comprobarse (es una redirección, la URL incorporada no es la recomendada, etc.).",
+    "userRed": "🔴 el status code es incorrecto o directamente no ha podido comprobarse el enlace incorporado.",
+    "useInfoStatusCode": "En el siguiente enlace encontrarás más información sobre el significado de los status code",
+    "useVisitGitHub": "Visita el repositorio del proyecto en GitHub para buscar nuevas actualizaciones o si quieres participar de alguna forma."
 }
