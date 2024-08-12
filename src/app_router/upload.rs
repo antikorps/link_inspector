@@ -33,7 +33,7 @@ pub async fn upload(State(app): State<App>, mut multipart: Multipart) -> Respons
         };
 
         match result {
-            Err(error) => (StatusCode::BAD_REQUEST, error.to_string()).into_response(),
+            Err(error) => (StatusCode::INTERNAL_SERVER_ERROR, error.to_string()).into_response(),
             Ok(unchecked_links) => {
                 let body = UploadResponse {
                     links: verify_links(unchecked_links, &app.http_client).await,

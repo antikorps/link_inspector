@@ -13,7 +13,7 @@ impl HtmlHandler {
             Err(error) => {
                 let error_message =
                     format!("could not parse a selector, how is it posible ¿? {error}");
-                return Err(error_message);
+                Err(error_message)
             }
             Ok(selector) => {
                 let mut links = Vec::new();
@@ -27,22 +27,18 @@ impl HtmlHandler {
 
                     links.push(NonCheckedLink { url, text })
                 }
-                return Ok(links);
+                Ok(links)
             }
         }
     }
 
-    pub fn process_file(
-        file_bytes: Bytes
-    ) -> Result<Vec<NonCheckedLink>, String> {
+    pub fn process_file(file_bytes: Bytes) -> Result<Vec<NonCheckedLink>, String> {
         match String::from_utf8(file_bytes.to_vec()) {
             Err(error) => {
                 let error_message = format!("could not get the content for the html file {error}");
-                return Err(error_message);
+                Err(error_message)
             }
-            Ok(ok) => {
-                return Self::get_links(ok);
-            }
+            Ok(ok) => Self::get_links(ok),
         }
     }
 }
