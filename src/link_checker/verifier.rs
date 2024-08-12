@@ -16,7 +16,7 @@ pub fn check_relocation(original_url: &str, final_url: &str) -> Option<String> {
             }
         }
     }
-    return Some(final_url.to_string());
+    Some(final_url.to_string())
 }
 
 /// Get url status via head request. Async process with futures in chunks of 30
@@ -35,8 +35,7 @@ pub async fn verify_links(links: Vec<NonCheckedLink>, client: &Client) -> Vec<Ch
         let responses = futures::future::join_all(futures).await;
 
         for r in responses {
-            let response;
-            match r {
+            let response = match r {
                 Err(error) => {
                     let error_message = format!("response error: {error}");
                     checked_links.push(CheckedLink {
@@ -50,8 +49,8 @@ pub async fn verify_links(links: Vec<NonCheckedLink>, client: &Client) -> Vec<Ch
                     link_index += 1;
                     continue;
                 }
-                Ok(ok) => response = ok,
-            }
+                Ok(ok) => ok,
+            };
 
             let relocation = check_relocation(&links[link_index].url, response.url().as_str());
 
@@ -73,7 +72,7 @@ pub async fn verify_links(links: Vec<NonCheckedLink>, client: &Client) -> Vec<Ch
                 url: String::from(&links[link_index].url),
                 text: String::from(&links[link_index].text),
                 status: Some(status),
-                active: active,
+                active,
                 relocation,
                 error: None,
             });
@@ -81,5 +80,5 @@ pub async fn verify_links(links: Vec<NonCheckedLink>, client: &Client) -> Vec<Ch
         }
     }
     checked_links.sort_by_key(|k| k.active);
-    return checked_links;
+    checked_links
 }

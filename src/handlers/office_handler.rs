@@ -3,7 +3,7 @@ use std::io::{Cursor, Read};
 use axum::body::Bytes;
 use zip::ZipArchive;
 
-use crate::app_router::models::{CheckedFileType, NonCheckedLink};
+use crate::app_router::models::{FileType, NonCheckedLink};
 
 struct OfficeRelationLinkText {
     id: String,
@@ -16,7 +16,7 @@ pub struct OfficeHandler {}
 impl OfficeHandler {
     pub fn get_links(
         mut zip: ZipArchive<Cursor<Bytes>>,
-        checked_file_type: CheckedFileType,
+        checked_file_type: FileType,
     ) -> Result<Vec<NonCheckedLink>, String> {
         let mut relations_link_text = Vec::new();
         let mut content_text_files = Vec::new();
@@ -30,53 +30,48 @@ impl OfficeHandler {
             }
 
             match checked_file_type {
-                CheckedFileType::Docx => {
+                FileType::Docx => {
                     if !file.name().starts_with("word/_rels/") {
                         continue;
                     }
                 }
-                CheckedFileType::Pptx => {
+                FileType::Pptx => {
                     if !file.name().starts_with("ppt/slides/_rels") {
                         continue;
                     }
                 }
-                CheckedFileType::Xlsx => {
+                FileType::Xlsx => {
                     if !file.name().starts_with("xl/worksheets/_rels") {
                         continue;
                     }
                 }
                 _ => continue,
             }
-
             let mut xml_rels = String::new();
-            match file.read_to_string(&mut xml_rels) {
-                Err(error) => {
-                    let error_message = format!("could not read xmls.rels {error}");
-                    return Err(error_message);
-                }
-                Ok(_) => (),
+            if let Err(error) = file.read_to_string(&mut xml_rels) {
+                let error_message = format!("could not read xmls.rels {error}");
+                return Err(error_message);
             }
 
-            let doc;
-            match roxmltree::Document::parse(&xml_rels) {
+            let doc = match roxmltree::Document::parse(&xml_rels) {
                 Err(error) => {
                     let error_message = format!("could not parse xml on xml_rels string: {error}");
                     return Err(error_message);
                 }
-                Ok(ok) => doc = ok,
-            }
+                Ok(ok) => ok,
+            };
 
             let _ = doc.descendants().find(|f| {
-                if f.attribute("TargetMode") == None {
+                if f.attribute("TargetMode").is_none() {
                     return false;
                 };
                 if f.attribute("TargetMode").unwrap() != "External" {
                     return false;
                 }
-                if f.attribute("Target") == None {
+                if f.attribute("Target").is_none() {
                     return false;
                 }
-                if f.attribute("Id") == None {
+                if f.attribute("Id").is_none() {
                     return false;
                 }
 
@@ -96,45 +91,36 @@ impl OfficeHandler {
                     text,
                     link,
                 });
-                return false;
+                false
             });
         }
 
         // Iterate text files (no _rels)
         for content_file in content_text_files {
             match checked_file_type {
-                CheckedFileType::Docx => {
-                    let content_file_path = format!(
-                        "word/{}",
-                        content_file
-                            .strip_prefix("word/_rels/")
-                            .unwrap()
-                            .to_string()
-                    );
+                FileType::Docx => {
+                    let content_file_path =
+                        format!("word/{}", content_file.strip_prefix("word/_rels/").unwrap());
                     let mut content_file_zip;
                     match zip.by_name(&content_file_path) {
                         Err(_) => continue,
                         Ok(ok) => content_file_zip = ok,
                     }
                     let mut content_file_xml = String::new();
-                    match content_file_zip.read_to_string(&mut content_file_xml) {
-                        Err(error) => {
-                            let error_message =
-                                format!("could not read {content_file_path} {error}");
-                            return Err(error_message);
-                        }
-                        Ok(_) => (),
+                    if let Err(error) = content_file_zip.read_to_string(&mut content_file_xml) {
+                        let error_message = format!("could not read {content_file_path} {error}");
+                        return Err(error_message);
                     }
-                    let doc;
-                    match roxmltree::Document::parse(&content_file_xml) {
+
+                    let doc = match roxmltree::Document::parse(&content_file_xml) {
                         Err(error) => {
                             let error_message = format!(
                                 "could not parse xml on {content_file_path} string: {error}"
                             );
                             return Err(error_message);
                         }
-                        Ok(ok) => doc = ok,
-                    }
+                        Ok(ok) => ok,
+                    };
 
                     for node in doc.descendants() {
                         if node.has_tag_name((
@@ -154,7 +140,7 @@ impl OfficeHandler {
                                     node_text = node_des.text().unwrap().to_string();
                                 }
 
-                                return false;
+                                false
                             });
 
                             for r in relations_link_text.iter_mut() {
@@ -169,14 +155,10 @@ impl OfficeHandler {
                         }
                     }
                 }
-
-                CheckedFileType::Pptx => {
+                FileType::Pptx => {
                     let content_file_path = format!(
                         "ppt/slides/{}",
-                        content_file
-                            .strip_prefix("ppt/slides/_rels/")
-                            .unwrap()
-                            .to_string()
+                        content_file.strip_prefix("ppt/slides/_rels/").unwrap()
                     );
                     let mut content_file_zip;
                     match zip.by_name(&content_file_path) {
@@ -184,24 +166,20 @@ impl OfficeHandler {
                         Ok(ok) => content_file_zip = ok,
                     }
                     let mut content_file_xml = String::new();
-                    match content_file_zip.read_to_string(&mut content_file_xml) {
-                        Err(error) => {
-                            let error_message =
-                                format!("could not read {content_file_path} {error}");
-                            return Err(error_message);
-                        }
-                        Ok(_) => (),
+                    if let Err(error) = content_file_zip.read_to_string(&mut content_file_xml) {
+                        let error_message = format!("could not read {content_file_path} {error}");
+                        return Err(error_message);
                     }
-                    let doc;
-                    match roxmltree::Document::parse(&content_file_xml) {
+
+                    let doc = match roxmltree::Document::parse(&content_file_xml) {
                         Err(error) => {
                             let error_message = format!(
                                 "could not parse xml on {content_file_path} string: {error}"
                             );
                             return Err(error_message);
                         }
-                        Ok(ok) => doc = ok,
-                    }
+                        Ok(ok) => ok,
+                    };
 
                     for node in doc.descendants() {
                         if node.has_tag_name((
@@ -221,7 +199,7 @@ impl OfficeHandler {
                                     node_text = node_des.text().unwrap().to_string();
                                 }
 
-                                return false;
+                                false
                             });
 
                             for r in relations_link_text.iter_mut() {
@@ -237,13 +215,10 @@ impl OfficeHandler {
                     }
                 }
 
-                CheckedFileType::Xlsx => {
+                FileType::Xlsx => {
                     let content_file_path = format!(
                         "xl/worksheets/{}",
-                        content_file
-                            .strip_prefix("xl/worksheets/_rels/")
-                            .unwrap()
-                            .to_string()
+                        content_file.strip_prefix("xl/worksheets/_rels/").unwrap()
                     );
                     let mut content_file_zip;
                     match zip.by_name(&content_file_path) {
@@ -251,24 +226,20 @@ impl OfficeHandler {
                         Ok(ok) => content_file_zip = ok,
                     }
                     let mut content_file_xml = String::new();
-                    match content_file_zip.read_to_string(&mut content_file_xml) {
-                        Err(error) => {
-                            let error_message =
-                                format!("could not read {content_file_path} {error}");
-                            return Err(error_message);
-                        }
-                        Ok(_) => (),
+                    if let Err(error) = content_file_zip.read_to_string(&mut content_file_xml) {
+                        let error_message = format!("could not read {content_file_path} {error}");
+                        return Err(error_message);
                     }
-                    let doc;
-                    match roxmltree::Document::parse(&content_file_xml) {
+
+                    let doc = match roxmltree::Document::parse(&content_file_xml) {
                         Err(error) => {
                             let error_message = format!(
                                 "could not parse xml on {content_file_path} string: {error}"
                             );
                             return Err(error_message);
                         }
-                        Ok(ok) => doc = ok,
-                    }
+                        Ok(ok) => ok,
+                    };
 
                     for node in doc.descendants() {
                         if node.has_tag_name((
@@ -319,23 +290,21 @@ impl OfficeHandler {
                 text: r.text,
             })
         }
-        return Ok(non_checked_links);
+        Ok(non_checked_links)
     }
 
     pub fn process_file(
         file_bytes: Bytes,
-        checked_file_type: CheckedFileType,
+        checked_file_type: FileType,
     ) -> Result<Vec<NonCheckedLink>, String> {
         let cursor = Cursor::new(file_bytes);
 
         match ZipArchive::new(cursor) {
             Err(error) => {
                 let error_message = format!("could not read docx as a zip file {error}");
-                return Err(error_message);
+                Err(error_message)
             }
-            Ok(zip) => {
-                return Self::get_links(zip, checked_file_type);
-            }
+            Ok(zip) => Self::get_links(zip, checked_file_type),
         }
     }
 }

@@ -1,12 +1,6 @@
 use serde::Serialize;
 
 #[derive(Serialize)]
-pub struct UploadResponse {
-    pub error: Option<String>,
-    pub links: Option<Vec<CheckedLink>>,
-}
-
-#[derive(Serialize)]
 pub struct CheckedLink {
     pub active: u8,
     pub url: String,
@@ -22,7 +16,7 @@ pub struct NonCheckedLink {
     pub text: String,
 }
 #[derive(PartialEq)]
-pub enum CheckedFileType {
+pub enum FileType {
     Docx,
     Pptx,
     Xlsx,

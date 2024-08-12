@@ -970,6 +970,7 @@ dependencies = [
  "scraper",
  "serde",
  "serde_json",
+ "thiserror",
  "tokio",
  "url",
  "zip",
