@@ -1,27 +1,30 @@
 ---
-const { pageContent } = Astro.props;
+import { getLangFromUrl, useTranslations } from "../i18n/utils";
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
 ---
 
 <h2
     class="text-2xl font-bold text-gray-900 dark:text-white pt-4 pb-4 text-center"
 >
-    {pageContent.resultsNumber}
+    {t("resultsNumber")}
     <span id="results-number"></span>
 </h2>
 
 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
     <div class="mb-4">
         <label for="order-label" class="block text-sm font-medium text-gray-700"
-            >{pageContent.orderLabel}:</label
+            >{t("orderLabel")}:</label
         >
         <select
             id="order-select"
             class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm sm:text-sm p-2"
         >
-            <option value="1">{pageContent.orderSelectOption1}</option>
-            <option value="2">{pageContent.orderSelectOption2}</option>
-            <option value="3">{pageContent.orderSelectOption3}</option>
-            <option value="4">{pageContent.orderSelectOption4}</option>
+            <option value="1">{t("orderSelectOption1")}</option>
+            <option value="2">{t("orderSelectOption2")}</option>
+            <option value="3">{t("orderSelectOption3")}</option>
+            <option value="4">{t("orderSelectOption4")}</option>
         </select>
     </div>
 
@@ -29,7 +32,7 @@ const { pageContent } = Astro.props;
         <label
             for="export-label"
             class="block text-sm font-medium text-gray-700"
-            >{pageContent.exportLabel}:</label
+            >{t("exportLabel")}:</label
         >
         <select
             id="export-select"

@@ -1,5 +1,8 @@
 ---
-const { pageContent } = Astro.props;
+import { getLangFromUrl, useTranslations } from "../i18n/utils";
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
 ---
 
 <div
@@ -8,7 +11,7 @@ const { pageContent } = Astro.props;
     role="alert"
 >
     <h3 class="text-3xl font-bold dark:text-white text-center mt-2 mb-2">
-        {pageContent.errorTextHeading}
+        {t("errorTextHeading")}
     </h3>
     <h3 class="text-3xl font-bold dark:text-white text-center mt-2 mb-2">😵‍💫</h3>
     <p id="results-error-message" class="text-center mt-2 mb-2"></p>

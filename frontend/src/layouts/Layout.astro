@@ -1,4 +1,14 @@
-<head>
+---
+import { getLangFromUrl } from "../i18n/utils";
+import Footer from "./Footer.astro";
+import Navbar from "./Navbar.astro";
+
+const { title } = Astro.props;
+const lang = getLangFromUrl(Astro.url);
+---
+
+<html lang={lang}>
+  <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Link Inspector</title>
@@ -7,4 +17,11 @@
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
     <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
     <link rel="manifest" href="/site.webmanifest" />
-</head>
+    <title>{title}</title>
+  </head>
+  <body>
+    <Navbar />
+    <slot />
+    <Footer />
+  </body>
+</html>
