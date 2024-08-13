@@ -1,37 +1,40 @@
 ---
-const { pageContent } = Astro.props;
+import { getLangFromUrl, useTranslations } from "../i18n/utils";
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
 ---
 
 <details class="block w-full max-w-[600px]">
     <summary
         class="cursor-pointer p-3 font-medium rtl:text-right text-gray-500 border border-gray-400 rounded-xl focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-800 dark:border-gray-700 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800"
-        >{pageContent.useSummary}</summary
+        >{t("useSummary")}</summary
     >
     <div class="p-3">
         <p class="mb-2 text-gray-500 dark:text-gray-400">
-            {pageContent.useExplication}
+            {t("useExplication")}
         </p>
         <p class="mb-2 text-gray-500 dark:text-gray-400">
-            {pageContent.useResults}
+            {t("useResults")}
         </p>
         <p class="mb-2 text-gray-500 dark:text-gray-400 ml-4">
-            {pageContent.useGreen}
+            {t("useGreen")}
         </p>
         <p class="mb-2 text-gray-500 dark:text-gray-400 ml-4">
-            {pageContent.useYellow}
+            {t("useYellow")}
         </p>
         <p class="mb-2 text-gray-500 dark:text-gray-400 ml-4">
-            {pageContent.userRed}
+            {t("userRed")}
         </p>
         <p class="mb-2 text-gray-500 dark:text-gray-400">
-            {pageContent.useInfoStatusCode}
+            {t("useInfoStatusCode")}
             <a
                 href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Status"
                 target="_blank">🔗</a
             >.
         </p>
         <p class="mb-2 text-gray-500 dark:text-gray-400">
-            {pageContent.useVisitGitHub}
+            {t("useVisitGitHub")}
         </p>
     </div>
 </details>

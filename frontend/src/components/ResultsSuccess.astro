@@ -1,7 +1,5 @@
 ---
 import ResultsOrderExport from "./ResultsOrderExport.astro";
-
-const { pageContent } = Astro.props;
 ---
 
 <div
@@ -11,5 +9,5 @@ const { pageContent } = Astro.props;
     <ul id="results-list" class="divide-y divide-gray-200 dark:divide-gray-700">
     </ul>
 
-    <ResultsOrderExport pageContent={pageContent}/>
+    <ResultsOrderExport />
 </div>
