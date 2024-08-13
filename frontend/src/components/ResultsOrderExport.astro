@@ -6,42 +6,40 @@ const t = useTranslations(lang);
 ---
 
 <h2
-    class="text-2xl font-bold text-gray-900 dark:text-white pt-4 pb-4 text-center"
+  class="text-2xl font-bold text-gray-900 dark:text-white pt-4 pb-4 text-center"
 >
-    {t("resultsNumber")}
-    <span id="results-number"></span>
+  {t("resultsNumber")}
+  <span id="results-number"></span>
 </h2>
 
 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-    <div class="mb-4">
-        <label for="order-label" class="block text-sm font-medium text-gray-700"
-            >{t("orderLabel")}:</label
-        >
-        <select
-            id="order-select"
-            class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm sm:text-sm p-2"
-        >
-            <option value="1">{t("orderSelectOption1")}</option>
-            <option value="2">{t("orderSelectOption2")}</option>
-            <option value="3">{t("orderSelectOption3")}</option>
-            <option value="4">{t("orderSelectOption4")}</option>
-        </select>
-    </div>
+  <div class="mb-4">
+    <label for="order-label" class="block text-sm font-medium text-gray-700"
+      >{t("orderLabel")}:</label
+    >
+    <select
+      id="order-select"
+      class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm sm:text-sm p-2"
+    >
+      <option value="1">{t("orderSelectOption1")}</option>
+      <option value="2">{t("orderSelectOption2")}</option>
+      <option value="3">{t("orderSelectOption3")}</option>
+      <option value="4">{t("orderSelectOption4")}</option>
+    </select>
+  </div>
 
-    <div class="mb-4">
-        <label
-            for="export-label"
-            class="block text-sm font-medium text-gray-700"
-            >{t("exportLabel")}:</label
-        >
-        <select
-            id="export-select"
-            class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm sm:text-sm p-2"
-        >
-            <option value="0"></option>
-            <option value="1">XLSX</option>
-            <option value="2">CSV</option>
-            <option value="3">JSON</option>
-        </select>
-    </div>
+  <div class="mb-4">
+    <label for="export-label" class="block text-sm font-medium text-gray-700"
+      >{t("exportLabel")}:</label
+    >
+    <select
+      id="export-select"
+      class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm sm:text-sm p-2"
+    >
+      <option value="0"></option>
+      <option value="1">XLSX</option>
+      <option value="2">CSV</option>
+      <option value="3">JSON</option>
+    </select>
+  </div>
 </div>

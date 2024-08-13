@@ -25,6 +25,12 @@ import UseExplication from "../../components/UseExplication.astro";
     */
 
   const $fileForm: HTMLInputElement = document.querySelector("#file-form")!;
+  const $fileFormDropzone = document.querySelector(
+    "#file-form-dropzone",
+  ) as HTMLElement;
+  const $fileFormShowName = document.querySelector(
+    "#file-form-show-name",
+  ) as HTMLElement;
   const $fileFormFile: HTMLInputElement =
     document.querySelector("#file-form-file")!;
   const $fileFormReset: HTMLButtonElement =
@@ -59,6 +65,50 @@ import UseExplication from "../../components/UseExplication.astro";
   $exportSelect.addEventListener("change", exportLinks);
   document.addEventListener("DOMContentLoaded", () => {
     reset(true);
+  });
+
+  // DRAG AND DROP
+  ["dragenter", "dragover", "dragleave", "drop"].forEach((eventName) => {
+    $fileFormDropzone.addEventListener(eventName, (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+    });
+  });
+
+  ["dragenter", "dragover"].forEach((eventName) => {
+    $fileFormDropzone.addEventListener(eventName, () => {
+      $fileFormDropzone.classList.add("border-blue-500");
+    });
+  });
+
+  ["dragleave", "drop"].forEach((eventName) => {
+    $fileFormDropzone.addEventListener(eventName, () => {
+      $fileFormDropzone.classList.remove("border-blue-500");
+    });
+  });
+
+  $fileFormDropzone.addEventListener("drop", (e: DragEvent) => {
+    if (e.dataTransfer) {
+      const files = e.dataTransfer.files;
+      if (files.length) {
+        $fileFormFile.files = files;
+        updateDragDropUI(files[0]);
+      } else {
+        resetDragDropUI();
+      }
+    }
+  });
+
+  $fileFormDropzone.addEventListener("click", () => {
+    $fileFormFile.click();
+  });
+
+  $fileFormFile.addEventListener("change", () => {
+    if ($fileFormFile.files && $fileFormFile.files.length > 0) {
+      updateDragDropUI($fileFormFile.files[0]);
+    } else {
+      resetDragDropUI();
+    }
   });
 
   /* 
@@ -101,9 +151,8 @@ import UseExplication from "../../components/UseExplication.astro";
 
   function reset(total: boolean) {
     if (total) {
-      $fileFormFile.value = "";
+      resetDragDropUI();
     }
-
     hideLoader();
     enabledButtons();
     $orderSelect.value = "1";
@@ -229,7 +278,7 @@ import UseExplication from "../../components/UseExplication.astro";
       alert("Sin resultados para ordenar");
       return;
     }
-    const orderType = $orderSelect.value; // Estado, URL, Status, Texto
+    const orderType = $orderSelect.value;
 
     if (orderType == "1") {
       sortLinksAsc("active");
@@ -294,5 +343,17 @@ import UseExplication from "../../components/UseExplication.astro";
     if (exportType == "3") {
       exportToJSON();
     }
+  }
+
+  function updateDragDropUI(file: File) {
+    $fileFormShowName.textContent = `${file.name}`;
+    $fileFormShowName.classList.remove("hidden");
+    $fileFormDropzone.classList.add("border-green-500", "bg-green-50");
+  }
+
+  function resetDragDropUI() {
+    $fileFormShowName.textContent = "";
+    $fileFormShowName.classList.add("hidden");
+    $fileFormDropzone.classList.remove("border-green-500", "bg-green-50");
   }
 </script>
