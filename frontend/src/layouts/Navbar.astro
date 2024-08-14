@@ -1,5 +1,7 @@
 ---
 import { languages } from "../i18n/ui";
+import { getLangFromUrl } from "../i18n/utils";
+const langUrl = getLangFromUrl(Astro.url);
 ---
 
 <nav class="bg-white border-gray-200 dark:bg-gray-900">
@@ -20,15 +22,18 @@ import { languages } from "../i18n/ui";
     <div
       class="flex items-center md:order-2 space-x-1 md:space-x-0 rtl:space-x-reverse"
     >
-      <ul class="flex gap-6 dark:text-white">
+      <select
+        id="lang-select"
+        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+      >
         {
           Object.entries(languages).map(([lang, label]) => (
-            <li>
-              <a href={`/${lang}/`}>{label}</a>
-            </li>
+            <option value={lang} selected={lang === langUrl ? true : undefined}>
+              {label}
+            </option>
           ))
         }
-      </ul>
+      </select>
     </div>
   </div>
 </nav>

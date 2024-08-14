@@ -1,43 +1,64 @@
 # Link Inspector
 
-**Link Inspector** es una aplicación web diseñada para ayudarte a verificar la validez de los enlaces en archivos Word. Con esta herramienta, puedes cargar un archivo Word y comprobar si todos los enlaces dentro de él son válidos.
+Link Inspector es una aplicación web creada de manera colaborativa que puedes ejecutar localmente (sin dependencias adicionales, solo ejecutando un archivo) diseñada para encontrar hipervínculos o enlaces en los principales tipos de de archivos y comprobar su disponibilidad (funcionan, están caídos, redirigen a alguna otra dirección, etc.).
 
-## Instalación y Uso
+Es una herramienta completamente gratuita que puedes user sin ningún tipo con limitación y con total seguridad (puedes revisar el código para que veas que no hay nada "extraño"). 
 
-Para utilizar **Link Inspector**, sigue estos pasos:
+## Uso de la aplicación
 
-1. **Descarga y Ejecuta el Ejecutable**:
-   - **Windows**: Descarga el archivo ejecutable proporcionado para Windows.
-   - **macOS**: Descarga el archivo ejecutable proporcionado para macOS.
-   - **GNU/Linux**: Descarga el archivo ejecutable para Linux. Es posible que necesites otorgar permisos de ejecución al archivo. Puedes hacerlo con el siguiente comando:
-     ```bash
-     chmod +x nombre_del_ejecutable
-     ```
+Para comenzar a usar Link Inspector, simplemente descarga el ejecutable disponible en la sección de [Releases](htts://github.com/antikorps/link_inspector/releases). Una vez descargado, sigue estos sencillos pasos:
 
-2. **Ejecuta el Programa**:
-   - Ejecuta el archivo descargado. En la consola, aparecerá un mensaje que te indicará la URL en la que se está ejecutando la aplicación web. Por defecto, será `http://localhost:3000`. Si el puerto 3000 está ocupado, la aplicación buscará automáticamente otro puerto disponible y te lo notificará en la consola.
+1. **Ejecuta el archivo**: Dependiendo de tu sistema operativo, ejecuta el archivo descargado.
+2. **Accede a la aplicación**: Al iniciar, la aplicación verás que aparece una URL en la terminal. Solo tienes que copiar esa URL en tu navegador para comenzar a utilizar Link Inspector.
 
-3. **Accede a la Aplicación**:
-   - Abre tu navegador web y visita la URL proporcionada en la consola para acceder a la aplicación.
+## Información para desarrolladores y colaboradores
+Este proyecto ha sido construido utilizando las siguientes tecnologías:
+- **Frontend:** Astro (framework moderno para construir aplicaciones web rápidas).
+- **Backend**: Rust utilizando el framework Axum.
 
-## Cómo Utilizar
 
-1. En la interfaz web, selecciona el archivo Word que deseas inspeccionar.
-2. La aplicación analizará todos los enlaces en el archivo y te mostrará el resultado de la validación.
+## Comandos importantes
+Si deseas contribuir al desarrollo de Link Inspector, aquí tienes algunas cuestiones que te ayudarán a mejorar la experiencia de desarrollo:
+Levantar el backend: 
+```
+cargo run
+```
 
-## Notas Adicionales
+Levantar el frontend en modo desarrollo (en el directorio frontend): 
+```
+npx astro dev
+```
+Para compilar el proyecto primero es necesario generar los archivos estáticos que forman el frontend y que se embeberán en el ejecutable final. Es decir, que habrá que seguir la siguiente secuencia:
+Desde el directorio frontend
+```
+npx astro build
+```
+Desde el directorio raíz
+```
+cargo build --release
+```
 
-- Asegúrate de tener una conexión a Internet activa para que la aplicación pueda verificar los enlaces.
-- Si encuentras algún problema al ejecutar el programa, verifica que el puerto en el que se está ejecutando no esté bloqueado por un firewall o utilizado por otra aplicación.
 
-## Contribuciones
+### Proxy en Vite Config
+Una de las cuestiones que más ha contribuido a la mejora de la experiencia de desarrollo es el hot reload en el frontend. En este caso, como front y back están completamente desacoplados se ejecutan en puertos distintos, por lo que para redireccionar las peticiones del front al back sin tener que estar hardcodeando se recomienda el uso del archivo `vite.config.js` 
 
-Si deseas contribuir al proyecto, siéntete libre de enviar un pull request o abrir un issue para sugerir mejoras o reportar problemas.
+```js
+import { defineConfig } from "vite";
 
-## Licencia
+export default defineConfig({
+  server: {
+    proxy: {
+      "/upload": {
+        target: "http://localhost:3000",
+        changeOrigin: true,
+      },
+    },
+  },
+});
+```
 
-Este proyecto está licenciado bajo la Licencia MIT. Consulta el archivo `LICENSE` para más detalles.
+Con esa configuración, por ejemplo, se redireccionará la petición /upload al puerto 3000. Si quieres forzar la ejecución del backend en un puerto concreto puedes servirte de la variable de entorno **LINK_INSPECTOR_PORT**
 
----
+## Contribuye y Colabora
 
-Gracias por usar **Link Inspector**. ¡Esperamos que te sea útil!
+¡Tu participación es valiosa! Ya seas desarrollador, diseñador, o simplemente tengas una buena idea, tu colaboración es bienvenida. Siéntete libre de abrir issues, realizar pull requests o simplemente dar feedback.

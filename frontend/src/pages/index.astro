@@ -24,6 +24,9 @@ import UseExplication from "../components/UseExplication.astro";
         ==========
     */
 
+  const $langSelect: HTMLSelectElement =
+    document.querySelector("#lang-select")!;
+
   const $fileForm: HTMLInputElement = document.querySelector("#file-form")!;
   const $fileFormDropzone = document.querySelector(
     "#file-form-dropzone",
@@ -57,6 +60,7 @@ import UseExplication from "../components/UseExplication.astro";
         EVENT HANDLERS
         ==============
     */
+  $langSelect.addEventListener("change", changeLanguage);
   $fileForm.addEventListener("submit", upload);
   $fileFormReset.addEventListener("click", () => {
     reset(true);
@@ -68,30 +72,30 @@ import UseExplication from "../components/UseExplication.astro";
   });
 
   // DRAG AND DROP
+
+  // Manejo de eventos Drag and Drop
   ["dragenter", "dragover", "dragleave", "drop"].forEach((eventName) => {
     $fileFormDropzone.addEventListener(eventName, (e) => {
       e.preventDefault();
       e.stopPropagation();
+      if (eventName === "dragenter" || eventName === "dragover") {
+        $fileFormDropzone.classList.add("border-blue-500");
+      } else {
+        $fileFormDropzone.classList.remove("border-blue-500");
+      }
     });
   });
 
-  ["dragenter", "dragover"].forEach((eventName) => {
-    $fileFormDropzone.addEventListener(eventName, () => {
-      $fileFormDropzone.classList.add("border-blue-500");
-    });
-  });
-
-  ["dragleave", "drop"].forEach((eventName) => {
-    $fileFormDropzone.addEventListener(eventName, () => {
-      $fileFormDropzone.classList.remove("border-blue-500");
-    });
-  });
-
-  $fileFormDropzone.addEventListener("drop", (e: DragEvent) => {
+  // Manejo del evento Drop
+  $fileFormDropzone.addEventListener("drop", (e) => {
     if (e.dataTransfer) {
       const files = e.dataTransfer.files;
       if (files.length) {
-        $fileFormFile.files = files;
+        const dataTransfer = new DataTransfer();
+        for (const file of files) {
+          dataTransfer.items.add(file);
+        }
+        $fileFormFile.files = dataTransfer.files;
         updateDragDropUI(files[0]);
       } else {
         resetDragDropUI();
@@ -99,10 +103,7 @@ import UseExplication from "../components/UseExplication.astro";
     }
   });
 
-  $fileFormDropzone.addEventListener("click", () => {
-    $fileFormFile.click();
-  });
-
+  // Manejo del evento Change en el input de archivo
   $fileFormFile.addEventListener("change", () => {
     if ($fileFormFile.files && $fileFormFile.files.length > 0) {
       updateDragDropUI($fileFormFile.files[0]);
@@ -355,5 +356,15 @@ import UseExplication from "../components/UseExplication.astro";
     $fileFormShowName.textContent = "";
     $fileFormShowName.classList.add("hidden");
     $fileFormDropzone.classList.remove("border-green-500", "bg-green-50");
+    $fileFormFile.value = "";
+  }
+
+  function changeLanguage() {
+    const selectedLanguage = $langSelect.value;
+    if (selectedLanguage == "es") {
+      window.location.href = "/";
+    } else {
+      window.location.href = `/${selectedLanguage}`;
+    }
   }
 </script>
