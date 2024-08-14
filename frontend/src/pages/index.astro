@@ -7,10 +7,10 @@ import UseExplication from "../components/UseExplication.astro";
 
 <Layout title="Link Inspector">
   <main
-    class="bg-slate-200 dark:bg-slate-800 flex min-h-screen justify-center items-center p-10"
+    class="bg-slate-200 dark:bg-slate-800 flex grow justify-center items-center p-10"
   >
     <div
-      class="flex flex-col items-center justify-center gap-16 w-full max-w-[1200px]"
+      class="flex flex-col items-center justify-center gap-16 w-full max-w-prose"
     >
       <FileUploadForm />
       <Results />
@@ -53,8 +53,15 @@ import UseExplication from "../components/UseExplication.astro";
 
   const $orderSelect: HTMLSelectElement =
     document.querySelector("#order-select")!;
-  const $exportSelect: HTMLSelectElement =
-    document.querySelector("#export-select")!;
+
+  const $exportJSONButton: HTMLButtonElement = document.querySelector(
+    "#export-json-button",
+  )!;
+  const $exportCSVButton: HTMLButtonElement =
+    document.querySelector("#export-csv-button")!;
+  const $exportXLSXButton: HTMLButtonElement = document.querySelector(
+    "#export-xlsx-button",
+  )!;
 
   /* 
         EVENT HANDLERS
@@ -66,7 +73,10 @@ import UseExplication from "../components/UseExplication.astro";
     reset(true);
   });
   $orderSelect.addEventListener("change", orderLinks);
-  $exportSelect.addEventListener("change", exportLinks);
+  $exportJSONButton.addEventListener("click", exportToJSON);
+  $exportCSVButton.addEventListener("click", exportToCSV);
+  $exportXLSXButton.addEventListener("click", exportToXLSX);
+
   document.addEventListener("DOMContentLoaded", () => {
     reset(true);
   });
@@ -157,7 +167,6 @@ import UseExplication from "../components/UseExplication.astro";
     hideLoader();
     enabledButtons();
     $orderSelect.value = "1";
-    $exportSelect.value = "0";
     $resultsError.classList.add("hidden");
     $resultsSuccess.classList.add("hidden");
   }
@@ -327,23 +336,6 @@ import UseExplication from "../components/UseExplication.astro";
     const json = JSON.stringify(links, null, 2);
     const blob = new Blob([json], { type: "application/json" });
     invisibleDownload(blob, "link_inspector_links.json");
-  }
-
-  function exportLinks() {
-    if (links.length == 0) {
-      alert("Sin resultados para ordenar");
-    }
-    const exportType = $exportSelect.value; // XLSX, CSV, JSON
-
-    if (exportType == "1") {
-      exportToXLSX();
-    }
-    if (exportType == "2") {
-      exportToCSV();
-    }
-    if (exportType == "3") {
-      exportToJSON();
-    }
   }
 
   function updateDragDropUI(file: File) {
