@@ -19,7 +19,7 @@ const lang = getLangFromUrl(Astro.url);
     <link rel="manifest" href="/site.webmanifest" />
     <title>{title}</title>
   </head>
-  <body>
+  <body class="flex flex-col min-h-screen">
     <Navbar />
     <slot />
     <Footer />
