@@ -37,6 +37,7 @@ export const ui = {
       "En el siguiente enlace encontrarás más información sobre el significado de los status code",
     useVisitGitHub:
       "Visita el repositorio del proyecto en GitHub para buscar nuevas actualizaciones o si quieres participar de alguna forma.",
+    copyText: "¡Copiado!",
   },
   en: {
     lang: "English",
@@ -68,6 +69,7 @@ export const ui = {
       "In the following link you will find more information about the meaning of status codes",
     useVisitGitHub:
       "Visit the project repository on GitHub to look for new updates or if you want to participate in any way.",
+    copyText:"Copied!",
   },
   fr: {
     lang: "Français",
@@ -99,5 +101,6 @@ export const ui = {
       "Dans le lien suivant, vous trouverez plus d'informations sur la signification des codes de statut",
     useVisitGitHub:
       "Visitez le référentiel du projet sur GitHub pour rechercher de nouvelles mises à jour ou si vous souhaitez participer d'une manière ou d'une autre.",
+    copyText: "Copier!"
   },
 } as const;

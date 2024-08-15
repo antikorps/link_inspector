@@ -19,6 +19,8 @@ import UseExplication from "../components/UseExplication.astro";
   </main>
 </Layout>
 <script>
+  declare const copyText: string;
+
   /*
         SELECTORS
         ==========
@@ -214,10 +216,21 @@ import UseExplication from "../components/UseExplication.astro";
 
       let warning = "";
       if (l.error != null) {
-        warning += `<br>❌ ${l.error}`;
+        warning += `<br><span class="text-gray-500">❌ ${l.error}</span>`;
       }
       if (l.relocation != null) {
-        warning += `<br>🔁 <a href="${l.relocation}" target="_blank">${l.relocation}</a>`;
+        warning += `
+        <br>
+        <div class="relative group inline paste-tooltip-group">
+          <span class="cursor-pointer paste-tooltip-trigger">
+            📋
+          </span>
+          <div class="paste-tooltip-content absolute left-1/2 transform -translate-x-1/2 -top-10 bg-gray-800 text-white text-sm py-1 px-2 rounded opacity-0 transition-opacity duration-300 pointer-events-none">
+            ${copyText}
+          </div>
+        </div>
+        🔁  
+        <a class="text-gray-500 break-words" href="${l.relocation}" target="_blank">${l.relocation}</a>`;
       }
 
       let status = "";
@@ -241,11 +254,19 @@ import UseExplication from "../components/UseExplication.astro";
                     ${state}
                     </div>
                     <div class="flex-1 min-w-0">
-                        <p class="text-sm font-medium text-gray-900 dark:text-white">
+                        <p class="text-sm font-medium text-gray-900 dark:text-white break-words">
                             ${l.text}
                         </p>
                         <p class="text-sm text-gray-500 dark:text-gray-400 mt-2 mb-2">
-                            <a href="${l.url}" target="_blank">${l.url}</a> ${warning}
+                          <div class="relative group inline paste-tooltip-group">
+                            <span class="cursor-pointer paste-tooltip-trigger">
+                              📋
+                            </span>
+                            <div class="paste-tooltip-content absolute left-1/2 transform -translate-x-1/2 -top-10 bg-gray-800 text-white text-sm py-1 px-2 rounded opacity-0 transition-opacity duration-300 pointer-events-none">
+                              ${copyText}
+                            </div>
+                          </div>  
+                          <a class="text-gray-500 break-words" href="${l.url}" target="_blank">${l.url}</a> ${warning}
                         </p>
                     </div>
                     <div
@@ -259,6 +280,8 @@ import UseExplication from "../components/UseExplication.astro";
 
     $resultsNumber.textContent = `${resultsNumber}`;
     $resultsList.innerHTML = resultsListHtml;
+
+    enablePasteTooltip();
   }
 
   function sortLinksAsc(field: string) {
@@ -357,6 +380,38 @@ import UseExplication from "../components/UseExplication.astro";
       window.location.href = "/";
     } else {
       window.location.href = `/${selectedLanguage}`;
+    }
+  }
+
+  function enablePasteTooltip() {
+    const $pasteTooltipGroups = document.querySelectorAll(
+      ".paste-tooltip-group",
+    );
+
+    for (const $ptg of $pasteTooltipGroups) {
+      const $trigger: HTMLSpanElement = $ptg.querySelector(
+        ".paste-tooltip-trigger",
+      )!;
+      $trigger.addEventListener("click", function () {
+        console.log(this);
+        const $content: HTMLDivElement = $ptg.querySelector(
+          ".paste-tooltip-content",
+        )!;
+        const $closesPgt: HTMLElement = this.closest(".paste-tooltip-group")!;
+        const $linkToCopy: HTMLElement =
+          $closesPgt.nextElementSibling as HTMLElement;
+        const textToCopy = $linkToCopy.textContent!;
+
+        navigator.clipboard.writeText(textToCopy).then(() => {
+          $content.classList.remove("opacity-0");
+          $content.classList.add("opacity-100");
+
+          setTimeout(() => {
+            $content.classList.remove("opacity-100");
+            $content.classList.add("opacity-0");
+          }, 1000);
+        });
+      });
     }
   }
 </script>
