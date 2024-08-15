@@ -231,6 +231,14 @@ impl OfficeHandler {
                     node_text = text.to_string();
                 }
             }
+            if descendant.has_tag_name((
+                "http://schemas.openxmlformats.org/drawingml/2006/main",
+                tag_name,
+            )) {
+                if let Some(text) = descendant.text() {
+                    node_text = text.to_string();
+                }
+            }
         });
 
         if relation.id == node_id {

@@ -1,5 +1,9 @@
 ---
 import ResultsOrderExport from "./ResultsOrderExport.astro";
+import { getLangFromUrl, useTranslations } from "../i18n/utils";
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
 ---
 
 <div
@@ -7,6 +11,56 @@ import ResultsOrderExport from "./ResultsOrderExport.astro";
   class="bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 p-6 w-full max-w-full md:min-w-[800px] hidden"
 >
   <ResultsOrderExport />
+  <ul class="hidden">
+    <li id="template-result" class="pt-3 pb-3">
+      <div
+        class="flex flex-col space-y-4 sm:space-y-0 sm:flex-row sm:items-center sm:space-x-4 rtl:space-x-reverse"
+      >
+        <div class="flex-shrink-0 template-result-active"></div>
+        <div class="flex-1 min-w-0">
+          <p
+            class="text-sm font-medium text-gray-900 dark:text-white break-words template-result-text"
+          >
+          </p>
+          <p class="text-sm text-gray-500 dark:text-gray-400 mt-2 mb-2">
+            <div class="relative group inline paste-tooltip-group">
+              <span class="cursor-pointer paste-tooltip-trigger"> 📋 </span>
+              <div
+                class="paste-tooltip-content absolute left-1/2 transform -translate-x-1/2 -top-10 bg-gray-800 text-white text-sm py-1 px-2 rounded opacity-0 transition-opacity duration-300 pointer-events-none template-result-copy-text"
+              >
+                {t("copyText")}
+              </div>
+            </div>
+            <a
+              class="text-gray-500 break-words template-result-url"
+              href=""
+              target="_blank"></a>
+            <br />
+            <div class="hidden template-result-error"></div>
+            <div class="hidden template-result-relocation">
+              <div class="relative group inline paste-tooltip-group">
+                <span class="cursor-pointer paste-tooltip-trigger"> 📋 </span>
+                <div
+                  class="paste-tooltip-content absolute left-1/2 transform -translate-x-1/2 -top-10 bg-gray-800 text-white text-sm py-1 px-2 rounded opacity-0 transition-opacity duration-300 pointer-events-none template-result-copy-text"
+                >
+                  {t("copyText")}
+                </div>
+              </div>
+              🔁
+              <a
+                class="text-gray-500 break-words template-result-relocation-url"
+                href=""
+                target="_blank"></a>
+            </div>
+          </p>
+        </div>
+        <div
+          class="inline-flex items-center text-base font-semibold text-gray-900 dark:text-white text-center template-result-status"
+        >
+        </div>
+      </div>
+    </li>
+  </ul>
   <ul id="results-list" class="divide-y divide-gray-200 dark:divide-gray-700">
   </ul>
 </div>

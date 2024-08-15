@@ -19,8 +19,6 @@ import UseExplication from "../components/UseExplication.astro";
   </main>
 </Layout>
 <script>
-  declare const copyText: string;
-
   /*
         SELECTORS
         ==========
@@ -85,7 +83,6 @@ import UseExplication from "../components/UseExplication.astro";
 
   // DRAG AND DROP
 
-  // Manejo de eventos Drag and Drop
   ["dragenter", "dragover", "dragleave", "drop"].forEach((eventName) => {
     $fileFormDropzone.addEventListener(eventName, (e) => {
       e.preventDefault();
@@ -98,7 +95,6 @@ import UseExplication from "../components/UseExplication.astro";
     });
   });
 
-  // Manejo del evento Drop
   $fileFormDropzone.addEventListener("drop", (e) => {
     if (e.dataTransfer) {
       const files = e.dataTransfer.files;
@@ -115,7 +111,6 @@ import UseExplication from "../components/UseExplication.astro";
     }
   });
 
-  // Manejo del evento Change en el input de archivo
   $fileFormFile.addEventListener("change", () => {
     if ($fileFormFile.files && $fileFormFile.files.length > 0) {
       updateDragDropUI($fileFormFile.files[0]);
@@ -209,77 +204,60 @@ import UseExplication from "../components/UseExplication.astro";
     $resultsNumber.innerHTML = "";
 
     let resultsNumber = 0;
-    let resultsListHtml = "";
+
+    const resultsTemplate: HTMLLIElement =
+      document.querySelector("#template-result")!;
 
     for (const l of links) {
       resultsNumber++;
 
-      let warning = "";
-      if (l.error != null) {
-        warning += `<br><span class="text-gray-500">❌ ${l.error}</span>`;
+      let active = "🟢";
+      if (l.active == 2) {
+        active = "🟡";
       }
+      if (l.active == 3) {
+        active = "🔴";
+      }
+      document.querySelector(".template-result-active")!.textContent = active;
+
+      const resultsTemplateCloned = (resultsTemplate as Node).cloneNode(true);
+      const template = resultsTemplateCloned as HTMLLIElement;
+      template.removeAttribute("id");
+
+      template.querySelector(".template-result-text")!.textContent = l.text;
+      const $resultUrl = template.querySelector(".template-result-url")!;
+      ($resultUrl as HTMLAnchorElement).href = l.url;
+      $resultUrl.textContent = l.url;
+
       if (l.relocation != null) {
-        warning += `
-        <br>
-        <div class="relative group inline paste-tooltip-group">
-          <span class="cursor-pointer paste-tooltip-trigger">
-            📋
-          </span>
-          <div class="paste-tooltip-content absolute left-1/2 transform -translate-x-1/2 -top-10 bg-gray-800 text-white text-sm py-1 px-2 rounded opacity-0 transition-opacity duration-300 pointer-events-none">
-            ${copyText}
-          </div>
-        </div>
-        🔁  
-        <a class="text-gray-500 break-words" href="${l.relocation}" target="_blank">${l.relocation}</a>`;
+        const $relocation = template.querySelector(
+          ".template-result-relocation",
+        )!;
+        $relocation.classList.remove("hidden");
+        const $relocationUrl: HTMLAnchorElement = template.querySelector(
+          ".template-result-relocation-url",
+        )!;
+        ($relocationUrl as HTMLAnchorElement).href = l.relocation;
+        $relocationUrl.textContent = l.relocation;
       }
 
-      let status = "";
+      if (l.error != null) {
+        const $resultsError = template.querySelector(".template-result-error")!;
+        $resultsError.innerHTML = `<span class="text-gray-500">❌ ${l.error}</span>`;
+        $resultsError.classList.remove("hidden");
+      }
+
+      let status = "❌";
       if (l.status != null) {
         status = l.status.toString();
       }
-
-      let state = "🟢";
-      if (l.active == 2) {
-        state = "🟡";
-      }
-      if (l.active == 3) {
-        state = "🔴";
-      }
-
-      const resultTemplate = `
-            <li class="pt-3 pb-0 sm:pt-4">
-                <div
-                    class="flex flex-col space-y-4 sm:space-y-0 sm:flex-row sm:items-center sm:space-x-4 rtl:space-x-reverse">
-                    <div class="flex-shrink-0">
-                    ${state}
-                    </div>
-                    <div class="flex-1 min-w-0">
-                        <p class="text-sm font-medium text-gray-900 dark:text-white break-words">
-                            ${l.text}
-                        </p>
-                        <p class="text-sm text-gray-500 dark:text-gray-400 mt-2 mb-2">
-                          <div class="relative group inline paste-tooltip-group">
-                            <span class="cursor-pointer paste-tooltip-trigger">
-                              📋
-                            </span>
-                            <div class="paste-tooltip-content absolute left-1/2 transform -translate-x-1/2 -top-10 bg-gray-800 text-white text-sm py-1 px-2 rounded opacity-0 transition-opacity duration-300 pointer-events-none">
-                              ${copyText}
-                            </div>
-                          </div>  
-                          <a class="text-gray-500 break-words" href="${l.url}" target="_blank">${l.url}</a> ${warning}
-                        </p>
-                    </div>
-                    <div
-                        class="inline-flex items-center text-base font-semibold text-gray-900 dark:text-white text-center">
-                        STATUS<br>${status}
-                    </div>
-                </div>
-            </li>`;
-      resultsListHtml += resultTemplate;
+      template.querySelector(".template-result-status")!.innerHTML =
+        `STATUS<br/>${status}`;
+      template.classList.remove("hidden");
+      $resultsList.insertAdjacentElement("beforeend", template);
     }
 
     $resultsNumber.textContent = `${resultsNumber}`;
-    $resultsList.innerHTML = resultsListHtml;
 
     enablePasteTooltip();
   }
