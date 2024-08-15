@@ -21,7 +21,11 @@ const lang = getLangFromUrl(Astro.url);
   </head>
   <body class="flex flex-col min-h-screen">
     <Navbar />
-    <slot />
+    <slot class="grow" />
     <Footer />
+    <script
+      is:inline
+      src="https://cdn.jsdelivr.net/npm/flowbite@2.5.1/dist/flowbite.min.js"
+    ></script>
   </body>
 </html>

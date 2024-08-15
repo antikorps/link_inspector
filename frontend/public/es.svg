@@ -1,0 +1,67 @@
+    <svg
+      aria-hidden="true"
+      xmlns="http://www.w3.org/2000/svg"
+      xmlns:xlink="http://www.w3.org/1999/xlink"
+      viewBox="0 0 20 20"
+    >
+      <rect width="28" height="20" rx="2" fill="white"></rect>
+      <mask
+        id="mask0_267_1082"
+        style="mask-type:luminance"
+        maskUnits="userSpaceOnUse"
+        x="0"
+        y="0"
+        width="28"
+        height="20"
+      >
+        <rect width="28" height="20" rx="2" fill="white"></rect>
+      </mask>
+      <g mask="url(#mask0_267_1082)">
+        <path
+          fill-rule="evenodd"
+          clip-rule="evenodd"
+          d="M0 5.33333H28V0H0V5.33333Z"
+          fill="#DD172C"></path>
+        <path
+          fill-rule="evenodd"
+          clip-rule="evenodd"
+          d="M0 20.0001H28V14.6667H0V20.0001Z"
+          fill="#DD172C"></path>
+        <path
+          fill-rule="evenodd"
+          clip-rule="evenodd"
+          d="M0 14.6666H28V5.33325H0V14.6666Z"
+          fill="#FFD133"></path>
+        <path
+          fill-rule="evenodd"
+          clip-rule="evenodd"
+          d="M7.33334 9.33333H8.66668V10H7.33334V9.33333Z"
+          fill="#FFEDB1"></path>
+        <path
+          d="M6.05901 9.3611C6.04281 9.16676 6.19618 9.00008 6.39119 9.00008H8.27546C8.47047 9.00008 8.62383 9.16676 8.60764 9.3611L8.43636 11.4165C8.39317 11.9348 7.9599 12.3334 7.43981 12.3334H7.22683C6.70675 12.3334 6.27348 11.9348 6.23029 11.4165L6.05901 9.3611Z"
+          stroke="#A41517"
+          stroke-width="0.666667"></path>
+        <path
+          fill-rule="evenodd"
+          clip-rule="evenodd"
+          d="M6 10H8.66667V10.6667H8L7.33333 12L6.66667 10.6667H6V10Z"
+          fill="#A41517"></path>
+        <rect
+          x="4"
+          y="8"
+          width="1.33333"
+          height="4.66667"
+          rx="0.666667"
+          fill="#A41517"></rect>
+        <rect
+          x="9.33334"
+          y="8"
+          width="1.33333"
+          height="4.66667"
+          rx="0.666667"
+          fill="#A41517"></rect>
+        <path
+          d="M6 7.73341C6 7.14431 6.47756 6.66675 7.06667 6.66675H7.6C8.1891 6.66675 8.66667 7.14431 8.66667 7.73341C8.66667 7.88069 8.54728 8.00008 8.4 8.00008H6.26667C6.11939 8.00008 6 7.88069 6 7.73341Z"
+          fill="#A41517"></path>
+      </g>
+    </svg>
