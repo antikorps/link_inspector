@@ -9,7 +9,7 @@ export default defineConfig({
   integrations: [tailwind(), lit()],
   i18n: {
     defaultLocale: "es",
-    locales: ["es", "en", "fr"]
+    locales: ["es", "en", "fr"],
   },
-  vite: viteConfig
+  vite: viteConfig,
 });

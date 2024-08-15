@@ -10,6 +10,9 @@ export const ui = {
   es: {
     lang: "Español",
     labelLanguage: "Idioma",
+    heroTitle: "Verifica los enlaces de tu documento",
+    heroDescription:
+      "Link Inspector es una herramienta que te permite verificar los enlaces de tu documento de forma rápida y sencilla. Solo tienes que subir tu archivo y esperar a que se procese.",
     fileFormLabel: "Selecciona tu archivo para procesar:",
     fileFormExtensionValid:
       "Extensiones válidas: docx, pptx, xlsx, html, txt, pdf",
@@ -42,6 +45,9 @@ export const ui = {
   en: {
     lang: "English",
     labelLanguage: "Language",
+    heroTitle: "Check the links of your document",
+    heroDescription:
+      "Link Inspector is a tool that allows you to verify the links of your document quickly and easily. You just have to upload your file and wait for it to be processed.",
     fileFormLabel: "Select your file to process:",
     fileFormExtensionValid:
       "Valid extensions: docx, pptx, xlsx, html, txt, pdf",
@@ -69,11 +75,14 @@ export const ui = {
       "In the following link you will find more information about the meaning of status codes",
     useVisitGitHub:
       "Visit the project repository on GitHub to look for new updates or if you want to participate in any way.",
-    copyText:"Copied!",
+    copyText: "Copied!",
   },
   fr: {
     lang: "Français",
     labelLanguage: "Langue",
+    heroTitle: "Vérifiez les liens de votre document",
+    heroDescription:
+      "Link Inspector est un outil qui vous permet de vérifier les liens de votre document rapidement et facilement. Il vous suffit de télécharger votre fichier et d'attendre qu'il soit traité.",
     fileFormLabel: "Sélectionnez votre fichier à traiter:",
     fileFormExtensionValid:
       "Extensions valides: docx, pptx, xlsx, html, txt, pdf",
@@ -101,6 +110,6 @@ export const ui = {
       "Dans le lien suivant, vous trouverez plus d'informations sur la signification des codes de statut",
     useVisitGitHub:
       "Visitez le référentiel du projet sur GitHub pour rechercher de nouvelles mises à jour ou si vous souhaitez participer d'une manière ou d'une autre.",
-    copyText: "Copier!"
+    copyText: "Copier!",
   },
 } as const;
