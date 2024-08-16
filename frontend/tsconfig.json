@@ -1,10 +1,12 @@
 {
   "compilerOptions": {
-    "experimentalDecorators": true,
     "baseUrl": ".",
     "paths": {
       "@components/*": [
         "src/components/*"
+      ],
+      "@layouts/*": [
+        "src/layouts/*"
       ],
       "@assets/*": [
         "src/assets/*"
@@ -15,7 +17,9 @@
       "@i18n/*": [
         "src/i18n/*"
       ]
-    }
+    },
+    "jsx": "react-jsx",
+    "jsxImportSource": "react"
   },
   "extends": "astro/tsconfigs/strict"
 }
