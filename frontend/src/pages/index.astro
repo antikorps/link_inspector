@@ -1,7 +1,9 @@
 ---
 import Layout from "@layouts/Layout.astro";
 import HeroSection from "@components/HeroSection.astro";
-import { FileUploadForm } from "@components/file-upload-form";
+import { UploadFileForm } from "@components/UploadFileForm";
+import { LinksList } from "@components/LinksList";
+import { LinkTable } from "@components/LinkTable";
 
 export function getStaticPaths() {
   return [
@@ -13,12 +15,13 @@ export function getStaticPaths() {
 ---
 
 <Layout title="Link Inspector">
-  <main
-    class="bg-white dark:bg-gray-900 flex grow justify-center items-center p-10"
-  >
-    <div class="flex flex-col items-center justify-center gap-16 w-full">
+  <main class="bg-white dark:bg-gray-900 flex grow justify-center p-10">
+    <div class="flex flex-col items-center w-full">
       <HeroSection />
-      <FileUploadForm client:load />
+      <div class="w-full max-w-md flex flex-col justify-center gap-4 md:gap-12">
+        <UploadFileForm client:load />
+        <LinksList client:load />
+      </div>
     </div>
   </main>
 </Layout>
