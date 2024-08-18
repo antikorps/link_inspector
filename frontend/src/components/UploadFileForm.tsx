@@ -3,6 +3,7 @@ import { links_list, links_loading } from "@states/links";
 import { useStore } from "@nanostores/react";
 
 export const UploadFileForm = () => {
+
   const [file, setFile] = useState<File | null>(null);
   const [error, setError] = useState<string | null>(null);
   const loading = useStore(links_loading);
@@ -63,7 +64,7 @@ export const UploadFileForm = () => {
     <div className="flex items-center justify-center w-full max-w-md">
       <label
         htmlFor="dropzone-file"
-        className="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-gray-800 drag dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600"
+        className="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-gray-700 drag dark:bg-gray-800 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600"
         onDrop={handleDrop}
         onDragOver={handleDragOver}
         onDragLeave={() => setDragging(false)}
@@ -105,11 +106,10 @@ export const UploadFileForm = () => {
               />
             </svg>
             <p className="mb-2 text-sm text-gray-500 dark:text-gray-400">
-              <span className="font-semibold">Click to upload</span> or drag and
-              drop
+              <span className="font-semibold"> Haz click para subir tu archivo</span> o arrastra y suelta tu archivo aquí
             </p>
             <p className="text-xs text-gray-500 dark:text-gray-400">
-              SVG, PNG, JPG or GIF (MAX. 800x400px)
+              Extensiones válidas: docx, pptx, xlsx, html, txt, pdf
             </p>
           </div>
         )}

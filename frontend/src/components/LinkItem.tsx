@@ -11,7 +11,7 @@ export const LinkItem = ({ link, index }: { link: Link, index: number }) => {
         <div className="flex-shrink-0">
           <StatusBadge status={link.status} active={link.active} />
         </div>
-        <div className="flex-1 min-w-0">
+        <a href={link.url} target="_blank" className="flex-1 min-w-0">
           <p className="text-sm font-medium text-gray-900 truncate dark:text-white">
             {link.text}
           </p>
@@ -21,12 +21,9 @@ export const LinkItem = ({ link, index }: { link: Link, index: number }) => {
           >
             {link.url}
           </p>
-        </div>
+        </a>
         <div className="inline-flex items-center text-base font-semibold dark:hover:bg-gray-800 rounded-md p-0.5">
           <div>
-            <label htmlFor={`url-${index}`} className="sr-only">
-              Label
-            </label>
             <Clipboard.WithIcon
               className="relative"
               valueToCopy={link.url}
