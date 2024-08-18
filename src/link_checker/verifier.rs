@@ -50,7 +50,12 @@ pub async fn manage_verify_request(link: &NonCheckedLink, client: &Client) -> Ch
     };
 
     let r;
-    match client.get(url_endpoint).send().await {
+    match client
+        .head(&url_endpoint)
+        .timeout(Duration::from_secs(6))
+        .send()
+        .await
+    {
         Err(error) => {
             return CheckedLink {
                 active: 3,
@@ -61,7 +66,30 @@ pub async fn manage_verify_request(link: &NonCheckedLink, client: &Client) -> Ch
                 relocation: None,
             }
         }
-        Ok(ok) => r = ok,
+        Ok(ok) => {
+            if ok.status() == 405 {
+                match client
+                    .get(&url_endpoint)
+                    .timeout(Duration::from_secs(6))
+                    .send()
+                    .await
+                {
+                    Err(error) => {
+                        return CheckedLink {
+                            active: 3,
+                            url: link.url.clone(),
+                            text: link.text.clone(),
+                            status: None,
+                            error: Some(error.to_string()),
+                            relocation: None,
+                        }
+                    }
+                    Ok(get_ok) => r = get_ok,
+                }
+            } else {
+                r = ok
+            }
+        }
     }
 
     let relocation = check_relocation(&link.url, r.url().as_str());
