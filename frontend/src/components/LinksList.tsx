@@ -81,7 +81,7 @@ export const LinksList = () => {
 
       {links.length === 0 && !loading && (
         <div className="flex items-center justify-center h-96 dark:bg-gray-800 bg-gray-100 rounded-md opacity-65">
-          <p className="text-lg text-gray-700 dark:text-gray-400">No se han encontrado enlaces</p>
+          <p className="text-lg text-gray-900 dark:text-gray-300">No se han encontrado enlaces</p>
         </div>
       )}
 
