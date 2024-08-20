@@ -183,6 +183,7 @@ export const UploadFileForm = () => {
           required
           className="hidden"
           onChange={handleFileChange}
+          disabled={loading ? true : false}
         />
       </label>
     </div>
