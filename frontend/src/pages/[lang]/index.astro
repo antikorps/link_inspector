@@ -3,6 +3,7 @@ import Layout from "@layouts/Layout.astro";
 import HeroSection from "@components/HeroSection.astro";
 import { UploadFileForm } from "@components/UploadFileForm";
 import { LinksList } from "@components/LinksList";
+import { getLangFromUrl } from "@i18n/utils";
 
 export function getStaticPaths() {
   return [
@@ -11,6 +12,8 @@ export function getStaticPaths() {
     { params: { lang: "fr" } },
   ];
 }
+
+const lang = getLangFromUrl(Astro.url);
 ---
 
 <Layout title="Link Inspector">
@@ -18,8 +21,8 @@ export function getStaticPaths() {
     <div class="flex flex-col items-center w-full">
       <HeroSection />
       <div class="w-full max-w-md flex flex-col justify-center gap-4 md:gap-12">
-        <UploadFileForm client:load />
-        <LinksList client:load />
+        <UploadFileForm lang={lang} client:load />
+        <LinksList lang={lang} client:load />
       </div>
     </div>
   </main>
