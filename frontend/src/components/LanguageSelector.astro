@@ -4,81 +4,76 @@ import EnglishFlagIcon from "@assets/en.svg";
 import FrenchFlagIcon from "@assets/fr.svg";
 import { getLangFromUrl } from "@i18n/utils";
 const lang = getLangFromUrl(Astro.url);
+
+const languages = [
+  {
+    lang: "es",
+    route: "/es/",
+    flag: SpanishFlagIcon.src,
+    name: "Español",
+  },
+  {
+    lang: "en",
+    route: "/en/",
+    flag: EnglishFlagIcon.src,
+    name: "English",
+  },
+  {
+    lang: "fr",
+    route: "/fr/",
+    flag: FrenchFlagIcon.src,
+    name: "Français",
+  },
+];
+
+const actualLanguage = languages.find((language) => language.lang === lang);
 ---
 
 <div
-  class="flex items-center md:order-2 space-x-1 md:space-x-0 rtl:space-x-reverse"
+  x-data="{isOpen: false}"
+  class="relative flex items-center md:order-2 space-x-1 md:space-x-0 rtl:space-x-reverse"
 >
   <button
     type="button"
-    data-dropdown-toggle="language-dropdown-menu"
+    @click="isOpen = !isOpen"
+    @keydown.escape="isOpen = false"
     class="inline-flex items-center font-medium justify-center px-4 py-2 text-sm text-gray-900 dark:text-white rounded-lg cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white"
   >
     <img
       class="w-5 h-5 rounded-full me-3"
-      src={lang === "es"
-        ? SpanishFlagIcon.src
-        : lang === "en"
-          ? EnglishFlagIcon.src
-          : FrenchFlagIcon.src}
+      src={actualLanguage ? actualLanguage.flag : SpanishFlagIcon.src}
       alt="descripción de la imagen"
     />
     {lang === "es" ? "Español" : lang === "en" ? "English" : "Français"}
   </button>
   <!-- Dropdown -->
   <div
-    class="z-50 hidden my-4 text-base list-none bg-white divide-y divide-gray-100 rounded-lg shadow dark:bg-gray-700"
+    class="absolute right-0 z-50 mt-12 py-1 top-0 text-base list-none bg-white divide-y divide-gray-100 rounded-lg shadow dark:bg-gray-700"
+    x-show="isOpen"
+    @click.away="isOpen = false"
     id="language-dropdown-menu"
   >
     <ul class="py-2 font-medium" role="none">
-      <li>
-        <a
-          href="/es/"
-          class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-600 dark:hover:text-white"
-          role="menuitem"
-        >
-          <div class="inline-flex items-center">
-            <img
-              class="w-3.5 h-3.5 rounded-full me-3"
-              src={SpanishFlagIcon.src}
-              alt="descripción de la imagen"
-            />
-            Español
-          </div>
-        </a>
-      </li>
-      <li>
-        <a
-          href="/en/"
-          class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-600 dark:hover:text-white"
-          role="menuitem"
-        >
-          <div class="inline-flex items-center">
-            <img
-              class="w-3.5 h-3.5 rounded-full me-3"
-              src={EnglishFlagIcon.src}
-              alt="descripción de la imagen"
-            />
-            English
-          </div>
-        </a>
-      </li>
-      <li>
-        <a
-          href="/fr/"
-          class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-600 dark:hover:text-white"
-          role="menuitem"
-        >
-          <div class="inline-flex items-center">
-            <img
-              class="w-3.5 h-3.5 rounded-full me-3"
-              src={FrenchFlagIcon.src}
-              alt="descripción de la imagen"
-            />
-            Français
-          </div>
-        </a>
-      </li>
+      {
+        languages.map((language) => (
+          <li>
+            <a
+              href={language.route}
+              class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-600 dark:hover:text-white"
+              role="menuitem"
+            >
+              <div class="inline-flex items-center">
+                <img
+                  class="w-3.5 h-3.5 rounded-full me-3"
+                  src={language.flag}
+                  alt="descripción de la imagen"
+                />
+                {language.name}
+              </div>
+            </a>
+          </li>
+        ))
+      }
     </ul>
   </div>
 </div>
