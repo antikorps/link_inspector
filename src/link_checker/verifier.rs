@@ -1,3 +1,5 @@
+use std::time::Duration;
+
 use crate::app_router::models::{CheckedLink, NonCheckedLink};
 use reqwest::Client;
 use url::{ParseError, Url};
@@ -101,7 +103,7 @@ pub async fn manage_verify_request(link: &NonCheckedLink, client: &Client) -> Ch
     // 3 means error, url not available, etc.
     let status = r.status().as_u16();
     let mut active = 3;
-    if status < 300 && relocation.is_none() {
+    if status > 199 && status < 300 && relocation.is_none() {
         active = 1
     }
     if status < 300 && relocation.is_some() {
@@ -118,10 +120,10 @@ pub async fn manage_verify_request(link: &NonCheckedLink, client: &Client) -> Ch
     }
 }
 
-/// Get url status via head request. Async process with futures in chunks of 30
+/// Get url status via head request. Async process with futures in chunks of 100
 pub async fn verify_links(links: Vec<NonCheckedLink>, client: &Client) -> Vec<CheckedLink> {
     let mut checked_links = Vec::new();
-    for chunk in links.chunks(30) {
+    for chunk in links.chunks(100) {
         let mut futures = Vec::new();
         for link in chunk {
             futures.push(manage_verify_request(link, client));
