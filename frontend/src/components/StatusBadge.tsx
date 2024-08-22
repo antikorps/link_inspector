@@ -6,6 +6,9 @@ interface Props {
 export const StatusBadge = ({ status, active }: Props) => {
   return (
     <>
+      {active == 0 && (
+        <span className=" inline-flex w-2 h-2 me-1 bg-gray-500 rounded-full md:hidden"></span>
+      )}
       {active == 1 && (
         <span className=" inline-flex w-2 h-2 me-1 bg-green-500 rounded-full md:hidden"></span>
       )}
@@ -14,6 +17,13 @@ export const StatusBadge = ({ status, active }: Props) => {
       )}
       {active == 3 && (
         <span className=" inline-flex w-2 h-2 me-1 bg-red-500 rounded-full md:hidden"></span>
+      )}
+
+      {active == 0 && (
+        <span className="items-center bg-gray-100 text-gray-800 text-xs font-medium px-2.5 py-0.5 rounded-full dark:bg-gray-300 dark:text-gray-900 hidden md:inline-flex">
+          <span className="w-2 h-2 me-1 bg-gray-500 rounded-full"></span>
+          ?
+        </span>
       )}
 
       {active == 1 && (

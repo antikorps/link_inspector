@@ -13,7 +13,7 @@ pub async fn create() -> Client {
     );
 
     reqwest::ClientBuilder::new()
-        .connect_timeout(Duration::from_secs(14))
+        .connect_timeout(Duration::from_secs(6))
         .default_headers(cabeceras)
         .build()
         .expect("ERROR FATAL: no se ha podido generar el cliente http")

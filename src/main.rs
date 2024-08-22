@@ -5,6 +5,38 @@ mod handlers;
 mod http_client;
 mod link_checker;
 
+fn say_hello(port: i32) {
+    let reset = "\x1b[0m";
+    let blue = "\x1b[34m";
+    let green = "\x1b[32m";
+    let yellow = "\x1b[33m";
+    let bold = "\x1b[1m";
+
+    let logo = r#"
+     _     ___ _   _ _  __                             
+    | |   |_ _| \ | | |/ /                             
+    | |    | ||  \| | ' /                              
+    | |___ | || |\  | . \                              
+    |_____|___|_|_\_|_|\_\ _____ ____ _____ ___  ____  
+    |_ _| \ | / ___||  _ \| ____/ ___|_   _/ _ \|  _ \ 
+     | ||  \| \___ \| |_) |  _|| |     | || | | | |_) |
+     | || |\  |___) |  __/| |__| |___  | || |_| |  _ < 
+    |___|_| \_|____/|_|   |_____\____| |_| \___/|_| \_\
+    
+    
+    "#;
+
+    let message = format!(
+        r#"{green}{logo}{green}
+
+{yellow}Accede a la aplicación web desde:{reset} {bold}{blue}http://localhost:{port}{reset}
+{yellow}Access the web application at:{reset} {bold}{blue}http://localhost:{port}{reset}
+
+"#
+    );
+    println!("{}", message);
+}
+
 #[tokio::main]
 async fn main() {
     let app_router = app_router::router::make_router().await;
@@ -33,7 +65,7 @@ async fn main() {
             }
 
             Ok(ok) => {
-                println!("Aplicación web iniciada en http://localhost:{port}\nWeb application started on http://localhost:{port}");
+                say_hello(port);
                 axum::serve(ok, app_router.clone()).await.unwrap();
             }
         }

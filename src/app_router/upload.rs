@@ -23,7 +23,7 @@ pub async fn upload(State(app): State<App>, mut multipart: Multipart) -> Respons
         let result = match type_extension {
             FileType::Html => HtmlHandler::process_file(file_bytes),
             FileType::Docx | FileType::Pptx | FileType::Xlsx => {
-                OfficeHandler::process_file(file_bytes, type_extension)
+                OfficeHandler::process_file(file_bytes)
             }
             FileType::Txt => TxtHandler::process_file(file_bytes),
             FileType::Pdf => PdfHandler::process_file(file_bytes),

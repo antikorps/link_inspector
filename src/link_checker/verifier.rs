@@ -2,7 +2,7 @@ use std::time::Duration;
 
 use crate::app_router::models::{CheckedLink, NonCheckedLink};
 use reqwest::Client;
-use url::{ParseError, Url};
+use url::Url;
 
 /// Check a possible relocation of the url.
 /// Set the conditions for a flexible relocation
@@ -22,38 +22,45 @@ pub fn check_relocation(original_url: &str, final_url: &str) -> Option<String> {
     Some(final_url.to_string())
 }
 
-pub async fn manage_verify_request(link: &NonCheckedLink, client: &Client) -> CheckedLink {
-    if link.url.starts_with('/') {
-        return CheckedLink {
-            active: 3,
+/// Check schema and only verify http, https
+pub fn check_schema(link: &NonCheckedLink) -> Option<CheckedLink> {
+    let url_parsed = match Url::parse(&link.url) {
+        Err(error) => {
+            return Some(CheckedLink {
+                active: 0,
+                url: link.url.clone(),
+                text: link.text.clone(),
+                status: None,
+                error: Some(error.to_string()),
+                relocation: None,
+            })
+        }
+        Ok(ok) => ok,
+    };
+    let valid_schemas = vec!["http", "https"];
+    let url_schema = url_parsed.scheme();
+    if !valid_schemas.contains(&url_schema) {
+        return Some(CheckedLink {
+            active: 0,
             url: link.url.clone(),
             text: link.text.clone(),
             status: None,
-            error: Some("url could not start with /, probably it is a relative url".to_string()),
+            error: Some(format!("url schema {} could not be verified", url_schema)),
             relocation: None,
-        };
+        });
     }
-    let url_endpoint = match Url::parse(&link.url) {
-        Err(error) => {
-            if error == ParseError::RelativeUrlWithoutBase {
-                format!("https://{}", link.url)
-            } else {
-                return CheckedLink {
-                    active: 3,
-                    url: link.url.clone(),
-                    text: link.text.clone(),
-                    status: None,
-                    error: Some(error.to_string()),
-                    relocation: None,
-                };
-            }
-        }
-        Ok(ok) => ok.to_string(),
-    };
+    None
+}
+
+pub async fn manage_verify_request(link: &NonCheckedLink, client: &Client) -> CheckedLink {
+    match check_schema(link) {
+        Some(s) => return s,
+        None => (),
+    }
 
     let r;
     match client
-        .head(&url_endpoint)
+        .head(&link.url)
         .timeout(Duration::from_secs(6))
         .send()
         .await
@@ -71,7 +78,7 @@ pub async fn manage_verify_request(link: &NonCheckedLink, client: &Client) -> Ch
         Ok(ok) => {
             if ok.status() == 405 {
                 match client
-                    .get(&url_endpoint)
+                    .get(&link.url)
                     .timeout(Duration::from_secs(6))
                     .send()
                     .await
@@ -98,7 +105,7 @@ pub async fn manage_verify_request(link: &NonCheckedLink, client: &Client) -> Ch
 
     // The active field facilitates front-end management (visualization, grouping of results, order...)
     // 1 (green) means the status is correct (any 2XX)
-    // 2 means that a correct status has been received (any 2XX) but the result of a redirection,
+    // 2 means that a correct status has been received (any 2XX) but is the result of a redirection,
     // so perhaps the URL entered is not correct, it must be consulted manually
     // 3 means error, url not available, etc.
     let status = r.status().as_u16();
@@ -106,7 +113,7 @@ pub async fn manage_verify_request(link: &NonCheckedLink, client: &Client) -> Ch
     if status > 199 && status < 300 && relocation.is_none() {
         active = 1
     }
-    if status < 300 && relocation.is_some() {
+    if status > 199 && status < 300 && relocation.is_some() {
         active = 2
     }
 
