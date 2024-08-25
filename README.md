@@ -78,3 +78,9 @@ Con esa configuración, por ejemplo, se redireccionará la petición /upload al 
 ## Contribuye y Colabora
 
 ¡Tu participación es valiosa! Ya seas desarrollador, diseñador, o simplemente tengas una buena idea, tu colaboración es bienvenida. Siéntete libre de abrir issues, realizar pull requests o simplemente dar feedback.
+
+## Capturas
+![Alt text](https://imgur.com/ffVsbJP.png "link inspector")
+![Alt text](https://imgur.com/hwtrKgK.png "link inspector")
+![Alt text](https://imgur.com/wURsIb3.png "link inspector")
+![Alt text](https://imgur.com/LnXbVuY.png "link inspector")
