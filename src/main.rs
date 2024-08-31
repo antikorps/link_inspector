@@ -1,6 +1,7 @@
 use std::env;
 
 mod app_router;
+mod cli;
 mod handlers;
 mod http_client;
 mod link_checker;
@@ -39,6 +40,8 @@ fn say_hello(port: i32) {
 
 #[tokio::main]
 async fn main() {
+    cli::cli_handler::manage_cli().await;
+
     let app_router = app_router::router::make_router().await;
 
     for mut port in 3000..8000 {

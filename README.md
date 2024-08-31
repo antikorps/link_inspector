@@ -25,6 +25,24 @@ Tras el análisis de los enlaces verás una lista de registros con las siguiente
 
 Por otra parte, la utilidad de **Exportar** no solo permite la consulta o la automatización de acciones, también facilita información más detallada en caso de errores, redirecciones, etc.
 
+## Interfaz de líneas de comandos (CLI - Command Line Interface)
+Es posible el uso comandos en caso de de necesitar la automatización de la revisión de múltiples documentos (o simplemente porque se prefiera). 
+
+La interfaz por línea de comandos puede generar los informes en dos tipos de archivos para datos estructurados: CSV y JSON.
+
+Para usar esta opción debe proporcionarse la ruta de un archivo a través de **--input** (**-i**) y facilitar el destino del archivo o archivos que se desean obtener: **--csv** (**-csv**) o **--json** (**-j**).
+
+Ejemplo de uso:
+```bash
+./link_inspector --input /home/usuario/Descargas/MiDocumento.txt --csv /home/usuario/Descargas/MiDocumentoEnlaces.csv -j /home/usuario/Descargas/MiDocumentoEnlaces.json
+```
+
+Resumen:
+- --input o -i (obligatorio)
+- --csv o -c (opcional)
+- --json o -j (opcional)
+
+**Siempre debe proporcionarse, como mínimo, uno de los campos opcionales** 
 
 ## Información para desarrolladores y colaboradores
 Este proyecto ha sido construido utilizando las siguientes tecnologías:

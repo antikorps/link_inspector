@@ -10,7 +10,7 @@ pub struct CheckedLink {
     pub relocation: Option<String>,
 }
 
-#[derive(Serialize)]
+#[derive(Serialize, Clone)]
 pub struct NonCheckedLink {
     pub url: String,
     pub text: String,
